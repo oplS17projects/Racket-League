@@ -1,7 +1,11 @@
-# Project Title Goes Here (10 words maximum)
+# Racket League
 
 ### Statement
-Describe your project. Why is it interesting? Why is it interesting to you personally? What do you hope to learn? 
+Our project is inspired by one of our favorite games, Rocket League. If you are unfamiliar with Rocket League, it is a video game with which you take control of cars and play soccer. You have boost which enables you to go faster, you can jump, fly through the air, and climb up walls. 
+
+The point of this project is to create a 2-D version of the game using Racket. Seeing as though it is in two dimensions and not three, some of the functionality of the original will not be present (most notably the flying, driving up walls, etc... as we are planning on implementing this with a top down view). It will be most similar to air hockey in the way it plays.
+
+We are interested in creating this project mostly because none of us have ever really created a game before. We've always wanted to mess around with the parts that make up a game (graphics, sound, physics, etc...) so we thought this ould be the perfect oppurtunity to do so. We hope to learn the challenges of creating a game and working on a large project as a team of developers. 
 
 ### Analysis
 Explain what approaches from class you will bring to bear on the project.
@@ -79,23 +83,14 @@ Which portion of the work will be completed (and committed to Github) by this da
 What additionally will be completed before the public presentation?
 
 ## Group Responsibilities
-Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
 
-Please use Github properly: each individual must make the edits to this file representing their own section of work.
+### Alexander Infantino @infantinoalex
+Team Lead
+Alex will be working on 
+as well as the unit testing for the project.
 
-**Additional instructions for teams of three:** 
-* Remember that you must have prior written permission to work in groups of three (specifically, an approved `FP3` team declaration submission).
-* The team must nominate a lead. This person is primarily responsible for code integration. This work may be shared, but the team lead has default responsibility.
-* The team lead has full partner implementation responsibilities also.
-* Identify who is team lead.
+### Thaddeus Ciras @TCiras
+Thad will be working on...
 
-In the headings below, replace the silly names and GitHub handles with your actual ones.
-
-### Susan Scheme @susanscheme
-will write the....
-
-### Leonard Lambda @lennylambda
-will work on...
-
-### Frank Funktions @frankiefunk 
-Frank is team lead. Additionally, Frank will work on...   
+### Dave Caizzi @caizzi 
+Dave will be working on... 
