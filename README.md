@@ -12,12 +12,13 @@ Explain what approaches from class you will bring to bear on the project.
 
 Be explicit about the techiques from the class that you will use. For example:
 
-- Will you use data abstraction? How?
-- Will you use recursion? How?
+- Will you use data abstraction? How? - Indeed
+- Will you use recursion? How? - Indeed
 - Will you use map/filter/reduce? How? 
-- Will you use object-orientation? How?
-- Will you use functional approaches to processing your data? How?
-- Will you use state-modification approaches? How? (If so, this should be encapsulated within objects. `set!` pretty much should only exist inside an object.)
+- Will you use object-orientation? How? - Indeed
+- Will you use functional approaches to processing your data? How? - Indeed
+- Will you use state-modification approaches? How? - Indeed
+	(If so, this should be encapsulated within objects. `set!` pretty much should only exist inside an object.)
 - Will you build an expression evaluator, like we did in the symbolic differentatior and the metacircular evaluator?
 - Will you use lazy evaluation approaches?
 
@@ -28,15 +29,15 @@ The idea here is to identify what ideas from the class you will use in carrying 
 ### External Technologies
 You are encouraged to develop a project that connects to external systems. For example, this includes systems that:
 
-- retrieve information or publish data to the web
-- generate or process sound
-- control robots or other physical systems
-- interact with databases
+- generate or process sound - Indeed
+- control robots or other physical systems - Keyboard?
+- interact with databases - Possibly
 
 If your project will do anything in this category (not only the things listed above!), include this section and discuss.
 
 ### Data Sets or other Source Materials
-If you will be working with existing data, where will you get those data from? (Dowload from a website? Access in a database? Create in a simulation you will build? ...)
+If you will be working with existing data, where will you get those data from? 
+	(Dowload from a website? Access in a database? Create in a simulation you will build? ...)
 
 How will you convert your data into a form usable for your project?  
 
@@ -47,6 +48,7 @@ If you are using some other starting materials, explain what they are. Basically
 ### Deliverable and Demonstration
 Explain exactly what you'll have at the end. What will it be able to do at the live demo?
 
+  The plan for this project is to have an air-hockey like game where that allows two players to play 
 What exactly will you produce at the end of the project? A piece of software, yes, but what will it do? Here are some questions to think about (and answer depending on your application).
 
 Will it run on some data, like batch mode? Will you present some analytical results of the processing? How can it be re-run on different source data?
