@@ -55,6 +55,12 @@ Alex will be working on the menu, sound effects, and unit testing.
 
 ### Thaddeus Ciras @TCiras
 Thad will be working on...
+ * Physics
+   * Ball
+   * Players
+ * Boost Calculations
+ * Demolition
+ * AI - Goalie
 
 ### Dave Caizzi @caizzi 
 Dave will be working on... 
