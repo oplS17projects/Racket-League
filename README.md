@@ -48,7 +48,10 @@ If you are using some other starting materials, explain what they are. Basically
 ### Deliverable and Demonstration
 Explain exactly what you'll have at the end. What will it be able to do at the live demo?
 
-  The plan for this project is to have an air-hockey like game where that allows two players to play 
+  The plan for this project is to have an air-hockey like game where that allows two players to play at the same time against eachother on the same computer.  The cars should always go forward in the direction they are facing and the ball should bounce off surfaces at the correct angles.
+  There will also be different field designs and a GUI allowing for the alteration of the ball's size, elastiticy, etc.  
+  If all goes exteramly well, we will implement basic AIs.  One would simply chase the ball, while the other would play goal.  
+ 
 What exactly will you produce at the end of the project? A piece of software, yes, but what will it do? Here are some questions to think about (and answer depending on your application).
 
 Will it run on some data, like batch mode? Will you present some analytical results of the processing? How can it be re-run on different source data?
