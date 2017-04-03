@@ -33,9 +33,13 @@ If you include some kind of _quantitative analysis,_ that would be good.
 To be successful, we should be able to play a full match, from start to finish, without any hiccups. All of our physics procedures should be unit tested along with our basic game logic.
 
 ## Architecture Diagram
-Upload the architecture diagram you made for your slide presentation to your repository, and include it in-line here.
+![Architecture Diagram](/ArchitectureDiagram.png?raw=false "Architecture Diagram")
 
-Create several paragraphs of narrative to explain the pieces and how they interoperate.
+The engine gets user input from the keyboard listener. Based off this user input, the various objects are updated and potential collisions are dealt with.
+
+The visual handler draws all the updated objects to the screen.
+
+The sound engine continuously plays music and will play sound effects when various events happen (demolitions, scoring, etc.).
 
 ## Schedule
 
@@ -63,4 +67,6 @@ Thad will be working on...
  * AI - Goalie
 
 ### Dave Caizzi @caizzi 
-Dave will be working on... 
+Dave will be working on
+* Creation of classes
+* Drawing images to the screen
