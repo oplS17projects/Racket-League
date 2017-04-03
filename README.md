@@ -35,11 +35,13 @@ To be successful, we should be able to play a full match, from start to finish, 
 ## Architecture Diagram
 ![Architecture Diagram](/ArchitectureDiagram.png?raw=false "Architecture Diagram")
 
-The engine gets user input from the keyboard listener. Based off this user input, the various objects are updated and potential collisions are dealt with.
+The engine is the main driver of our game. It will keep track of the objects we have, update them when necessary, check for input from our keyboard listener, tell our sound engine when to play music, and tell our visual handler when things need to be drawn and redrawn. It also will be the area of code where the state of our objects is kept and modified. This is so that only the engine will be touching it and nothing else, hopefully reducing the amount of bugs we have.
 
-The visual handler draws all the updated objects to the screen.
+The visual handler draws all the updated objects to the screen. It will contain a few procedures which will have our objects passed to it, which will in turn, update the state of our canvas that we are drawing on.
 
 The sound engine continuously plays music and will play sound effects when various events happen (demolitions, scoring, etc.).
+
+We are currently planning on using htdp/universe and their image library along with the racket math library, and the rsound library to implement our project.
 
 ## Schedule
 
