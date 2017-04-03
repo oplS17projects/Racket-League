@@ -70,3 +70,4 @@ Thad will be working on...
 Dave will be working on
 * Creation of classes
 * Drawing images to the screen
+* Creating sprites for objects
