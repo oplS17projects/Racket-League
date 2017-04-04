@@ -39,3 +39,4 @@ Thumbs.db
 # Backups #
 .bak
 .swp
+.rkt~
