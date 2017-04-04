@@ -1,6 +1,9 @@
 #lang racket
 
 (require rsound)
+(require racket/require)
+
+(require "testlibrary.rkt")
 
 (define (sound-effects)
   (let ((sound-stream (make-pstream)))
