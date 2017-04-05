@@ -3,17 +3,10 @@
 (require rsound)
 (require racket/require)
 
-(provide sound-engine)
+(provide create-sound-engine)
+(require "soundsources.rkt")
 
-(define (sound-effects)
-  (list
-   (list 'goal-scored (rs-read "goal.wav"))))
-
-(define (music-effects)
-  (list
-   (list 'menu-music (rs-read "menu.wav"))))
-
-(define (sound-engine)
+(define (create-sound-engine)
   (let ((sound-stream (make-pstream))
         (music-stream (make-pstream)))
     (define (play-sound-effect sound-name)
