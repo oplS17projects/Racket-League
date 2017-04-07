@@ -1,0 +1,32 @@
+Here is my plan for the physics engine:
+
+Car:
+ - Position x, y
+ - Velocity vx, vy
+ - Velocity range:
+   - 50 w/o boost
+   - 100 w/ boost
+ - Velocity decays @ 10 per second
+ - Velocity goes to 0 upon colission with a wall
+
+Ball:
+ - Position x, y
+ - Velocity vx, vy
+ - Velocity decays @ 5 per second
+ - Bounces:
+   - Angle of incidence ...
+   - Corners reverse direction
+ - Speed control:
+   - Car:
+     - ball.vx = (+ ball.vx (/ car.vx 3))
+     - ball.vy = (+ ball.vy (/ car.vy 3))
+     - If either is larger than 100, reduce back to 100
+   - Wall:
+     - Velocity stays the same unless it hits a corner
+
+Map Needs:
+/---------------\
+|		|
+
+|		|
+\---------------/
