@@ -90,5 +90,5 @@ ballNewPos = calculates new ball x position
   (cond [(= 0 (- pos rad)) (list (- pos vel) (- vel))]
         [(and (equal? axis 'x)(= (car winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [(and (equal? axis 'y)(= (cdr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
-        [else (list (+ x vel) vel)]))
+        [else (list (+ pos vel) vel)]))
 
