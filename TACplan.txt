@@ -1,8 +1,8 @@
 Here is my plan for the physics engine:
 
 Car:
- - Position x, y
- - Velocity vx, vy
+ - Position (x, y) <- cons cell
+ - Velocity (vx, vy) <- cons cell
  - Velocity range:
    - 50 w/o boost
    - 100 w/ boost
@@ -25,6 +25,12 @@ Ball:
      - Velocity stays the same unless it hits a corner
 
 Map Needs:
+ - Position Definition:
+   - (0,0) is the top-left corner of the screen
+   - Positive x is right
+   - Positive y is down
+   - winSize = (WinX, WinY) size of window
+ - Layout:
 /---------------\
 |		|
 
