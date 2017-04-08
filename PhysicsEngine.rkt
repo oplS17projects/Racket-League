@@ -70,10 +70,25 @@ ballPos = Set the ball's new position
 @param pos = the position of the ball
 @param vel = the velocity of the ball
 @param rad = the radius of the ball
+@return    = List with car position and cdr velocity
 |#
 (define (ballPos pos vel rad)
   (let* ((nvel (currentvel (car vel) (cadr vel) 75))
-         (nXpos (ballPos (car pos) (car nvel) 'x))
-         (nYpos (ballPos (cadr pos) (cadr nvel) 'y)))
+         (nXpos (ballNewPos (car pos) (car nvel) rad 'x))
+         (nYpos (ballNewPos (cadr pos) (cadr nvel) rad 'y)))
     (list (list nXpos nYpos) nvel)))
+
+#|
+ballNewPos = calculates new ball x position
+
+@param pos = position
+@param vel = velocity
+@param rad = ball radius
+@return    = new position and velocity
+|#
+(define (ballNewPos pos vel rad axis)
+  (cond [(= 0 (- pos rad)) (list (- pos vel) (- vel))]
+        [(and (equal? axis 'x)(= (car winSize) (+ pos rad))) (list (- pos vel) (- vel))]
+        [(and (equal? axis 'y)(= (cdr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
+        [else (list (+ x vel) vel)]))
 
