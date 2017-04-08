@@ -61,3 +61,19 @@ turnLeft
 
 
 |#
+
+#|Ball physics.  Similar to car, but bounces off edges|#
+
+#|
+ballPos = Set the ball's new position
+
+@param pos = the position of the ball
+@param vel = the velocity of the ball
+@param rad = the radius of the ball
+|#
+(define (ballPos pos vel rad)
+  (let* ((nvel (currentvel (car vel) (cadr vel) 75))
+         (nXpos (ballPos (car pos) (car nvel) 'x))
+         (nYpos (ballPos (cadr pos) (cadr nvel) 'y)))
+    (list (list nXpos nYpos) nvel)))
+
