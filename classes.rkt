@@ -1,5 +1,8 @@
 #lang racket
 
+(provide make-car)
+(provide make-ball)
+
 (require 2htdp/image)
 
 (define car-width 100)
