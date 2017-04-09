@@ -10,9 +10,6 @@
 ;; Custom Libraries
 (require "soundsources.rkt")
 
-;; The instantiated sound-engine we want to use throughout to handle music
-(define sound-engine (create-sound-engine))
-
 ;; Creates a new sound engine
 (define (create-sound-engine)
   (let ((sound-stream (make-pstream))
@@ -39,6 +36,9 @@
   (cond ((eq? (car current-item) effects-name) (cadr current-item))
         ((null? rest-of-list) (error "Could Not Find Effect"))
         (else (effects-list-iter effects-name (car rest-of-list) (cdr rest-of-list)))))
+
+;; The instantiated sound-engine we want to use throughout to handle music
+(define sound-engine (create-sound-engine))
 
 ;; This code handles playing music or sound effects using the RSound library
 ;; The only code that we want to expose for use is the create-sound engine.

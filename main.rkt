@@ -1,17 +1,18 @@
 #lang racket
 
+;; Exposed Procedures
+
+;; Racket Libraries
 (require 2htdp/image)
 (require 2htdp/universe)
 
-(require "classes.rkt")
-(require "soundengine.rkt")
+;; Custom Libraries
 (require "PhysicsEngine.rkt")
-(require "VisualHandler.rkt")
 (require "keylistener.rkt")
 
-(define sound-engine (create-sound-engine))
-
 (big-bang 0
+          (display-mode 'fullscreen)
           (on-key key-handler)
+          (on-tick update-world .03)
           (to-draw draw-entities))
 
