@@ -20,7 +20,7 @@ carpos = the new position of the car
   (let* ((nvel (currentvel (car vel) (cadr vel) 50))
          (nXpos (newPos (car pos) (car nvel) 'x))
          (nYpos (newPos (cadr pos) (cadr nvel) 'y)))
-    (list (list nXpos nYpos) nvel)))
+    (list (list nXpos nYpos) nvel (ftheta nvel))))
 
 #|
 newPos = changes a position based on a velocity
@@ -57,11 +57,48 @@ currentvel = calculates the current velocity of the object
     (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
           [(> 0 v) (list 0 0)]
           [else (list (- (* max (cos c)) 0.001)
-                      (- (* max (sin c)) 0.001))]
+                      (- (* max (sin c)) 0.001))])))
 
 #|Convert Keyboard input to car rotation / movement|#
 
-#|Use get-velo to retreve velocity of car|#
+#|Use 'get-velo to retreve velocity of car|#
+
+#|
+ftheta = calculates the angle
+
+@param vel = velocity list
+@return    = angle
+|#
+
+(define (ftheta vel)
+  (let* ((vx (car vel))
+         (vy (cadr vel))
+         (v (sqrt (+ (* vx vx) (* vy vy)))))
+    (radians->degrees (cos (/ vx v)))))
+
+#|
+thetaXY = converts an angle into x and y components
+
+@param pts = an angle and velocity components
+@return    = new velocity components
+|#
+
+(define (thetaXY pts)
+  (let ((ang (car pts))
+        (v (cadr pts)))
+    (list (* v (cos ang))
+          (* v (sin ang)))))
+
+#|
+findVelo = finds regular velocity
+
+@param comp = components
+@return     = value
+|#
+
+(define (findVelo comp)
+  (sqrt (+ (* (car comp) (car comp))
+           (* (cadr comp) (cadr comp)))))
 
 #|
 left-turn = turn the car left
@@ -71,7 +108,14 @@ left-turn = turn the car left
 |#
 
 (define (left-turn num)
-  #t)
+  (if (= num 1) (let ((ntheta (list (+ ((car entities) 'theta) 0.01) (findVelo ((car entities) 'get-velo)))))
+                  ((car entities) 'get-velo)(((car entities) 'update-car)(list ((car entities) 'get-pos)
+                                                                               (thetaXY ntheta)
+                                                                               (ftheta (thetaXY ntheta)))))
+      (let ((ntheta (list (+ ((car entities) 'theta) 0.01) (findVelo ((car entities) 'get-velo)))))
+        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
+                                            (thetaXY ntheta)
+                                            (ftheta (thetaXY ntheta)))))))
 
 #|
 right-turn = turn the car right
@@ -81,7 +125,14 @@ right-turn = turn the car right
 |#
 
 (define (right-turn num)
-  #t)
+  (if (= num 1) (let ((ntheta (list (- ((car entities) 'theta) 0.01) (findVelo ((car entities) 'get-velo)))))
+                  ((car entities) 'get-velo)(((car entities) 'update-car)(list ((car entities) 'get-pos)
+                                                                               (thetaXY ntheta)
+                                                                               (ftheta (thetaXY ntheta)))))
+      (let ((ntheta (list (- ((car entities) 'theta) 0.01) (findVelo ((car entities) 'get-velo)))))
+        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
+                                            (thetaXY ntheta)
+                                            (ftheta (thetaXY ntheta)))))))
 
 #|
 slow-car = slow the car
@@ -91,10 +142,16 @@ slow-car = slow the car
 |#
 
 (define (slow-car num)
-  (if (= num 1) (list ((car entities) 'get-pos)(list (- (car ((car entities) 'get-velo)) 0.02)
-                                                     (- (cadr ((car entities) 'get-velo)) 0.02)))
-      (list ((cadr entities) 'get-pos)(list (- (car ((cadr entities) 'get-velo)) 0.02)
-                                            (- (cadr ((cadr entities) 'get-velo)) 0.02)))))
+  (if (= num 1) (let ((vx (- (car ((car entities) 'get-velo)) 0.02))
+                      (vy (- (cadr ((car entities) 'get-velo)) 0.02)))
+                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
+                                                     (list vx vy)
+                                                     ((car entities) 'theta))))
+      (let ((vx (- (car ((cadr entities) 'get-velo)) 0.02))
+            (vy (- (cadr ((cadr entities) 'get-velo)) 0.02)))
+        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
+                                            (list vx vy)
+                                            ((cadr entities) 'theta))))))
        
 #|
 accelerate-car = accelerate the car
@@ -104,10 +161,16 @@ accelerate-car = accelerate the car
 |#
 
 (define (accelerate-car num)
-  (if (= num 1) (list ((car entities) 'get-pos)(list (+ (car ((car entities) 'get-velo)) 0.02)
-                                                     (+ (cadr ((car entities) 'get-velo)) 0.02)))
-      (list ((cadr entities) 'get-pos)(list (+ (car ((cadr entities) 'get-velo)) 0.02)
-                                            (+ (cadr ((cadr entities) 'get-velo)) 0.02)))))
+  (if (= num 1) (let ((vx (+ (car ((car entities) 'get-velo)) 0.02))
+                      (vy (+ (cadr ((car entities) 'get-velo)) 0.02)))
+                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
+                                                     (list vx vy)
+                                                     ((car entities) 'theta))))
+      (let ((vx (+ (car ((cadr entities) 'get-velo)) 0.02))
+            (vy (+ (cadr ((cadr entities) 'get-velo)) 0.02)))
+        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
+                                            (list vx vy)
+                                            ((cadr entities) 'theta))))))
 
 #|
 update = updates positions and velocities
@@ -120,8 +183,8 @@ update = updates positions and velocities
   (let ((car1 (car entities))
         (car2 (cadr entities))
         (ball (caddr entities)))
-    (((car1 'update-car) (newPos car1))
-     ((car2 'update-car) (newPos car2))
+    (((car1 'update-car) (carPos car1))
+     ((car2 'update-car) (carPos car2))
      ((ball 'update-ball) (ballPos ball)))))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
