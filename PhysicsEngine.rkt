@@ -36,11 +36,10 @@ newPos = changes a position based on a velocity
 @return   = new position
 |#
 (define (newPos p vp axis)
-  (define (calc)
-    (+ p vp))
-  (cond [(> 0 (calc)) 0]
-        [(> (calc) (getAxis axis)) (getAxis axis)]
-        [else (calc)]))
+  (let ((calc (+ p vp)))
+    (cond [(or (= 0 calc)(> 0 calc)) 0]
+          [(> calc (getAxis axis)) (getAxis axis)]
+          [else calc])))
 
 #|Getter for a particular axis' length|#
 (define (getAxis axis)
@@ -58,8 +57,9 @@ currentvel = calculates the current velocity of the object
 |#
 (define (currentvel vx vy max)
   (let* ((v (findVelo (list vx vy)))
-         (c (if (not (= v 0)) (acos (/ vx v)) 0)))
-    (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
+         (c (if (= v 0) 0 (acos (/ vx v)))))
+    (cond [(< max v) (list (- vx 0.001) (- vy 0.001))]
+          [(= 0 v) (list 0 0)]
           [(> 0 v) (list 0 0)]
           [else (list (- (* max (cos c)) 0.001)
                       (- (* max (sin c)) 0.001))])))
@@ -188,12 +188,12 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  (let ((car1 (car entities))
-        (car2 (cadr entities))
-        (ball (caddr entities)))
-    ((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
-    ((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))
-    ((ball 'update-ball) (ballPos (ball 'get-pos) (ball 'get-velo) 15))
+  (let ((c1 (car entities))
+        (c2 (cadr entities))
+        (b (caddr entities)))
+    ((c1 'update-car) (carPos (c1 'get-pos) (c1 'get-velo)))
+    ;;((c2 'update-car) (carPos (c2 'get-pos) (c2 'get-velo)))
+    ;;((b 'update-ball) (ballPos (b 'get-pos) (b 'get-velo) 15))
     w))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
