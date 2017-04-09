@@ -54,17 +54,75 @@ currentvel = calculates the current velocity of the object
 (define (currentvel vx vy max)
   (let* ((v (sqrt (+ (* vx vx) (* vy vy))))
          (c (acos (/ vx v))))
-    (if (> max v) (list (- vx 0.001) (- vy 0.001))
-        (list (- (* max (cos c)) 0.001)
-              (- (* max (sin c)) 0.001)))))
+    (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
+          [(> 0 v) (list 0 0)]
+          [else (list (- (* max (cos c)) 0.001)
+                      (- (* max (sin c)) 0.001))]
 
 #|Convert Keyboard input to car rotation / movement|#
 
+#|Use get-velo to retreve velocity of car|#
+
 #|
-turnLeft
+left-turn = turn the car left
 
-
+@param num = which car
+@return    = new velocity
 |#
+
+(define (left-turn num)
+  #t)
+
+#|
+right-turn = turn the car right
+
+@param num = which car
+@return    = new velocity
+|#
+
+(define (right-turn num)
+  #t)
+
+#|
+slow-car = slow the car
+
+@param num = which car
+@return    = new velocity
+|#
+
+(define (slow-car num)
+  (if (= num 1) (list ((car entities) 'get-pos)(list (- (car ((car entities) 'get-velo)) 0.02)
+                                                     (- (cadr ((car entities) 'get-velo)) 0.02)))
+      (list ((cadr entities) 'get-pos)(list (- (car ((cadr entities) 'get-velo)) 0.02)
+                                            (- (cadr ((cadr entities) 'get-velo)) 0.02)))))
+       
+#|
+accelerate-car = accelerate the car
+
+@param num = which car
+@return    = new velocity
+|#
+
+(define (accelerate-car num)
+  (if (= num 1) (list ((car entities) 'get-pos)(list (+ (car ((car entities) 'get-velo)) 0.02)
+                                                     (+ (cadr ((car entities) 'get-velo)) 0.02)))
+      (list ((cadr entities) 'get-pos)(list (+ (car ((cadr entities) 'get-velo)) 0.02)
+                                            (+ (cadr ((cadr entities) 'get-velo)) 0.02)))))
+
+#|
+update = updates positions and velocities
+
+@param lst = list of everything
+@return    = updated everything
+|#
+
+(define (update)
+  (let ((car1 (car entities))
+        (car2 (cadr entities))
+        (ball (caddr entities)))
+    (((car1 'update-car) (newPos car1))
+     ((car2 'update-car) (newPos car2))
+     ((ball 'update-ball) (ballPos ball)))))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
