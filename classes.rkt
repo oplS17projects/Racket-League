@@ -4,6 +4,8 @@
 (provide make-ball)
 
 (require 2htdp/image)
+(provide make-car)
+(provide make-ball)
 
 (define car-width 100)
 (define car-length 50)
