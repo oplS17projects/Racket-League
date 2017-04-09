@@ -2,9 +2,9 @@
 #|For testing|#
 (define winSize (list 200 400))
 
-(include "classes.rkt")
-(include "VisualHandler.rkt")
-(include "soundengine.rkt")
+(require "classes.rkt")
+(require "VisualHandler.rkt")
+(require "soundengine.rkt")
 (provide left-turn)
 (provide right-turn)
 (provide accelerate-car)
@@ -21,7 +21,7 @@ carpos = the new position of the car
 @return    = returns a list consisting of the new position of the car
              and the new velocity
 |#
-(define (carpos pos vel)
+(define (carPos pos vel)
   (let* ((nvel (currentvel (car vel) (cadr vel) 50))
          (nXpos (newPos (car pos) (car nvel) 'x))
          (nYpos (newPos (cadr pos) (cadr nvel) 'y)))
@@ -184,13 +184,14 @@ update = updates positions and velocities
 @return    = updated everything
 |#
 
-(define (update)
+(define (update w)
   (let ((car1 (car entities))
         (car2 (cadr entities))
         (ball (caddr entities)))
-    (((car1 'update-car) (carPos car1))
-     ((car2 'update-car) (carPos car2))
-     ((ball 'update-ball) (ballPos ball)))))
+    (((car1 'update-car) (carPos (car car1) (cadr car1)))
+     ((car2 'update-car) (carPos (car car2) (cadr car2)))
+     ((ball 'update-ball) (ballPos (car ball) (cadr ball) 15))
+     (draw-entities) w)))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
