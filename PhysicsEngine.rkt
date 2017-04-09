@@ -5,6 +5,11 @@
 (include "classes.rkt")
 (include "VisualHandler.rkt")
 (include "soundengine.rkt")
+(provide left-turn)
+(provide right-turn)
+(provide accelerate-car)
+(provide slow-car)
+(provide update)
 
 #|Creates new car position (pt mass)|#
 
