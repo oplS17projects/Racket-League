@@ -21,7 +21,7 @@ carpos = the new position of the car
 @return    = returns a list consisting of the new position of the car
              and the new velocity
 |#
-(define (carpos pos vel)
+(define (carPos pos vel)
   (let* ((nvel (currentvel (car vel) (cadr vel) 50))
          (nXpos (newPos (car pos) (car nvel) 'x))
          (nYpos (newPos (cadr pos) (cadr nvel) 'y)))
@@ -57,7 +57,7 @@ currentvel = calculates the current velocity of the object
              is less than the max value
 |#
 (define (currentvel vx vy max)
-  (let* ((v (sqrt (+ (* vx vx) (* vy vy))))
+  (let* ((v (findVelo (list vx vy)))
          (c (acos (/ vx v))))
     (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
           [(> 0 v) (list 0 0)]
@@ -78,7 +78,7 @@ ftheta = calculates the angle
 (define (ftheta vel)
   (let* ((vx (car vel))
          (vy (cadr vel))
-         (v (sqrt (+ (* vx vx) (* vy vy)))))
+         (v (findVelo (list vx vy))))
     (radians->degrees (cos (/ vx v)))))
 
 #|
