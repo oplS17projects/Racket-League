@@ -7,7 +7,8 @@
 
 (define (sound-effects)
   (list
-   (list 'goal-scored (rs-read "goal.wav"))))
+   (list 'goal-scored (rs-read "goal.wav"))
+   (list 'turn-car (rs-read "turn.wav"))))
 
 (define (music-effects)
   (list

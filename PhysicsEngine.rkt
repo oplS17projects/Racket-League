@@ -2,6 +2,10 @@
 #|For testing|#
 (define winSize (list 200 400))
 
+(include "classes.rkt")
+(include "VisualHandler.rkt")
+(include "soundengine.rkt")
+
 #|Creates new car position (pt mass)|#
 
 #|

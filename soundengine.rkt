@@ -56,4 +56,4 @@
 (define (effects-list-iter effects-name current-item rest-of-list)
   (cond ((eq? (car current-item) effects-name) (cadr current-item))
         ((null? rest-of-list) (error "Could Not Find Effect"))
-        (else (effects-list-iter (car rest-of-list) (cdr rest-of-list)))))
+        (else (effects-list-iter effects-name (car rest-of-list) (cdr rest-of-list)))))
