@@ -62,6 +62,9 @@ turnLeft
 
 |#
 
+(define (turnLeft vel)
+  (#t))
+
 #|Ball physics.  Similar to car, but bounces off edges|#
 
 #|
