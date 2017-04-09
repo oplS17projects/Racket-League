@@ -58,7 +58,7 @@ currentvel = calculates the current velocity of the object
 |#
 (define (currentvel vx vy max)
   (let* ((v (findVelo (list vx vy)))
-         (c (acos (/ vx v))))
+         (c (if (not (= v 0)) (acos (/ vx v)) 0)))
     (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
           [(> 0 v) (list 0 0)]
           [else (list (- (* max (cos c)) 0.001)
@@ -188,10 +188,10 @@ update = updates positions and velocities
   (let ((car1 (car entities))
         (car2 (cadr entities))
         (ball (caddr entities)))
-    (((car1 'update-car) (carPos (car car1) (cadr car1)))
-     ((car2 'update-car) (carPos (car car2) (cadr car2)))
-     ((ball 'update-ball) (ballPos (car ball) (cadr ball) 15))
-     (draw-entities) w)))
+    (((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
+     ((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))
+     ((ball 'update-ball) (ballPos (ball 'get-pos) (ball 'get-velo) 15))
+     w)))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
@@ -220,6 +220,5 @@ ballNewPos = calculates new ball x position
 (define (ballNewPos pos vel rad axis)
   (cond [(= 0 (- pos rad)) (list (- pos vel) (- vel))]
         [(and (equal? axis 'x)(= (car winSize) (+ pos rad))) (list (- pos vel) (- vel))]
-        [(and (equal? axis 'y)(= (cdr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
+        [(and (equal? axis 'y)(= (cadr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [else (list (+ pos vel) vel)]))
-
