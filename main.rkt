@@ -9,10 +9,11 @@
 ;; Custom Libraries
 (require "PhysicsEngine.rkt")
 (require "keylistener.rkt")
+(require "VisualHandler.rkt")
 
 (big-bang 0
           (display-mode 'fullscreen)
           (on-key key-handler)
-          (on-tick update-world .03)
+          (on-tick update .03)
           (to-draw draw-entities))
 

@@ -2,9 +2,9 @@
 #|For testing|#
 (define winSize (list 200 400))
 
-(include "classes.rkt")
-(include "VisualHandler.rkt")
-(include "soundengine.rkt")
+(require "classes.rkt")
+(require "VisualHandler.rkt")
+(require "soundengine.rkt")
 (provide left-turn)
 (provide right-turn)
 (provide accelerate-car)
@@ -184,13 +184,14 @@ update = updates positions and velocities
 @return    = updated everything
 |#
 
-(define (update)
+(define (update w)
   (let ((car1 (car entities))
         (car2 (cadr entities))
         (ball (caddr entities)))
-    (((car1 'update-car) (carPos car1))
-     ((car2 'update-car) (carPos car2))
-     ((ball 'update-ball) (ballPos ball)))))
+    (((car1 'update-car) (carPos (car car1) (cadr car1)))
+     ((car2 'update-car) (carPos (car car2) (cadr car2)))
+     ((ball 'update-ball) (ballPos (car ball) (cadr ball) 15))
+     (draw-entities) w)))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
