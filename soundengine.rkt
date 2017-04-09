@@ -1,5 +1,45 @@
 #lang racket
 
+;; Exposed Procedures
+(provide sound-engine)
+
+;; Racket libraries
+(require rsound)
+(require racket/require)
+
+;; Custom Libraries
+(require "soundsources.rkt")
+
+;; Creates a new sound engine
+(define (create-sound-engine)
+  (let ((sound-stream (make-pstream))
+        (music-stream (make-pstream)))
+    (define (play-sound-effect sound-name)
+      (pstream-play sound-stream
+                    (find-effect sound-name (sound-effects))))
+    (define (play-music-effect music-name)
+      (pstream-play music-stream
+                    (find-effect music-name (music-effects))))
+    (define (engine procedure-name)
+      (cond ((eq? procedure-name 'play-sound-effect) play-sound-effect)
+            ((eq? procedure-name 'play-music-effect) play-music-effect)
+            ((eq? procedure-name 'stop) (stop))
+            (else (error "Could Not Communicate With Sound Engine"))))
+    engine))
+
+;; Finds the effects name in a given list based upon a symbol
+(define (find-effect effects-name effects-list)
+  (effects-list-iter effects-name (car effects-list) (cdr effects-list)))
+
+;; Iterates through a list to find effects name
+(define (effects-list-iter effects-name current-item rest-of-list)
+  (cond ((eq? (car current-item) effects-name) (cadr current-item))
+        ((null? rest-of-list) (error "Could Not Find Effect"))
+        (else (effects-list-iter effects-name (car rest-of-list) (cdr rest-of-list)))))
+
+;; The instantiated sound-engine we want to use throughout to handle music
+(define sound-engine (create-sound-engine))
+
 ;; This code handles playing music or sound effects using the RSound library
 ;; The only code that we want to expose for use is the create-sound engine.
 ;; This will create a sound engine with the proper procedures exposed for use within
@@ -27,33 +67,3 @@
 
 ;; Need to redesign for better testability. Currently procedures are nested and cannot be properly tested
 ;; due to the fact that they call other procedures.
-
-(require rsound)
-(require racket/require)
-
-(provide create-sound-engine)
-(require "soundsources.rkt")
-
-(define (create-sound-engine)
-  (let ((sound-stream (make-pstream))
-        (music-stream (make-pstream)))
-    (define (play-sound-effect sound-name)
-      (pstream-play sound-stream
-                    (find-effect sound-name (sound-effects))))
-    (define (play-music-effect music-name)
-      (pstream-play music-stream
-                    (find-effect music-name (music-effects))))
-    (define (engine procedure-name)
-      (cond ((eq? procedure-name 'play-sound-effect) play-sound-effect)
-            ((eq? procedure-name 'play-music-effect) play-music-effect)
-            ((eq? procedure-name 'stop) (stop))
-            (else (error "Could Not Communicate With Sound Engine"))))
-    engine))
-
-(define (find-effect effects-name effects-list)
-  (effects-list-iter effects-name (car effects-list) (cdr effects-list)))
-  
-(define (effects-list-iter effects-name current-item rest-of-list)
-  (cond ((eq? (car current-item) effects-name) (cadr current-item))
-        ((null? rest-of-list) (error "Could Not Find Effect"))
-        (else (effects-list-iter effects-name (car rest-of-list) (cdr rest-of-list)))))
