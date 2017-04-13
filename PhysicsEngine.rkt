@@ -117,13 +117,16 @@ left-turn = turn the car left
 (define (left-turn num)
   (if (= num 1) (let ((ntheta (list (+ ((car entities) 'get-theta) 0.01)
                                     (findVelo ((car entities) 'get-velo)))))
-                  ((car entities) 'get-velo)(((car entities) 'update-car)(list ((car entities) 'get-pos)
+                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
                                                                                (thetaXY ntheta)
                                                                                (ftheta (thetaXY ntheta)))))
       (let ((ntheta (list (+ ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
         (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
                                             (thetaXY ntheta)
                                             (ftheta (thetaXY ntheta)))))))
+;(define (left-turn num)
+;  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 0.01)))
+;                  ((
 
 #|
 right-turn = turn the car right
@@ -134,7 +137,7 @@ right-turn = turn the car right
 
 (define (right-turn num)
   (if (= num 1) (let ((ntheta (list (- ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
-                  ((car entities) 'get-velo)(((car entities) 'update-car)(list ((car entities) 'get-pos)
+                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
                                                                                (thetaXY ntheta)
                                                                                (ftheta (thetaXY ntheta)))))
       (let ((ntheta (list (- ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
@@ -150,6 +153,9 @@ slow-car = slow the car
 |#
 
 (define (slow-car num)
+  (list 0 0))
+
+(define (slow-car-a num)
   (if (= num 1) (let ((vx (- (car ((car entities) 'get-velo)) 0.02))
                       (vy (- (cadr ((car entities) 'get-velo)) 0.02)))
                   (((car entities) 'update-car)(list ((car entities) 'get-pos)
@@ -169,6 +175,9 @@ accelerate-car = accelerate the car
 |#
 
 (define (accelerate-car num)
+  (list 0 0))
+
+(define (accelerate-car-s num)
   (if (= num 1) (let ((vx (+ (car ((car entities) 'get-velo)) 0.02))
                       (vy (+ (cadr ((car entities) 'get-velo)) 0.02)))
                   (((car entities) 'update-car)(list ((car entities) 'get-pos)
