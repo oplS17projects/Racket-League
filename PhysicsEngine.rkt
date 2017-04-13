@@ -115,18 +115,14 @@ left-turn = turn the car left
 |#
 
 (define (left-turn num)
-  (if (= num 1) (let ((ntheta (list (+ ((car entities) 'get-theta) 0.01)
-                                    (findVelo ((car entities) 'get-velo)))))
-                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
-                                                                               (thetaXY ntheta)
-                                                                               (ftheta (thetaXY ntheta)))))
-      (let ((ntheta (list (+ ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
-        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
-                                            (thetaXY ntheta)
-                                            (ftheta (thetaXY ntheta)))))))
-;(define (left-turn num)
-;  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 0.01)))
-;                  ((
+  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 0.01)))
+                  ((car1 'update-car) (list (car1 'get-pos)
+                                            (car1 'get-velo)
+                                            ntheta)))
+      (let ((ntheta (+ (car2 'get-theta) 0.01)))
+        ((car2 'update-car) (list (car2 'get-pos)
+                                  (car2 'get-velo)
+                                  ntheta)))))
 
 #|
 right-turn = turn the car right
