@@ -115,11 +115,11 @@ left-turn = turn the car left
 |#
 
 (define (left-turn num)
-  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 0.01)))
+  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 1)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (+ (car2 'get-theta) 0.01)))
+      (let ((ntheta (+ (car2 'get-theta) 1)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -132,14 +132,14 @@ right-turn = turn the car right
 |#
 
 (define (right-turn num)
-  (if (= num 1) (let ((ntheta (list (- ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
-                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
-                                                                               (thetaXY ntheta)
-                                                                               (ftheta (thetaXY ntheta)))))
-      (let ((ntheta (list (- ((car entities) 'get-theta) 0.01) (findVelo ((car entities) 'get-velo)))))
-        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
-                                            (thetaXY ntheta)
-                                            (ftheta (thetaXY ntheta)))))))
+  (if (= num 1) (let ((ntheta (- (car1 'get-theta) 1)))
+                  ((car1 'update-car) (list (car1 'get-pos)
+                                            (car1 'get-velo)
+                                            ntheta)))
+      (let ((ntheta (- (car2 'get-theta) 1)))
+        ((car2 'update-car) (list (car2 'get-pos)
+                                  (car2 'get-velo)
+                                  ntheta)))))
 
 #|
 slow-car = slow the car
@@ -171,7 +171,7 @@ accelerate-car = accelerate the car
 |#
 
 (define (accelerate-car num)
-  (list 0 0))
+  (car1 'get-theta))
 
 (define (accelerate-car-s num)
   (if (= num 1) (let ((vx (+ (car ((car entities) 'get-velo)) 0.02))
@@ -193,13 +193,9 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  (let ((c1 (car entities))
-        (c2 (cadr entities))
-        (b (caddr entities)))
-    ((c1 'update-car) (carPos (c1 'get-pos) (c1 'get-velo)))
-    ;;((c2 'update-car) (carPos (c2 'get-pos) (c2 'get-velo)))
-    ;;((b 'update-ball) (ballPos (b 'get-pos) (b 'get-velo) 15))
-    w))
+  ((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
+  #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))
+  ((ball 'update-car) (carPos (ball 'get-pos) (ball 'get-velo)))|#)
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
