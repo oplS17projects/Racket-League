@@ -58,10 +58,10 @@ currentvel = calculates the current velocity of the object
 (define (currentvel vx vy max)
   (let* ((v (findVelo (list vx vy)))
          (c (if (= v 0) 0 (acos (/ vx v)))))
-    (cond [(< max v) (list (- vx 0.001) (- vy 0.001))]
+    (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
           [(= 0 v) (list 0 0)]
           [(> 0 v) (list 0 0)]
-          [else (list (- (* max (cos c)) 0.001)
+          [(> v max)(list (- (* max (cos c)) 0.001)
                       (- (* max (sin c)) 0.001))])))
 
 #|Convert Keyboard input to car rotation / movement|#
@@ -81,7 +81,17 @@ ftheta = calculates the angle
          (v (findVelo (list vx vy))))
     (if (= v 0)
         0
-        (radians->degrees (cos (/ vx v))))))
+        (checkTheta (radians->degrees (cos (/ vx v)))))))
+
+#|
+checkTheta = insures Theta is less than 360
+
+@param theta = original angle
+@return      = angle < 360
+|#
+(define (checkTheta theta)
+  (if (> 360 theta) theta
+      (checkTheta (- 360 theta))))
 
 #|
 thetaXY = converts an angle into x and y components
@@ -115,11 +125,11 @@ left-turn = turn the car left
 |#
 
 (define (left-turn num)
-  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 1)))
+  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 90)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (+ (car2 'get-theta) 1)))
+      (let ((ntheta (+ (car2 'get-theta) 90)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -132,11 +142,11 @@ right-turn = turn the car right
 |#
 
 (define (right-turn num)
-  (if (= num 1) (let ((ntheta (- (car1 'get-theta) 1)))
+  (if (= num 1) (let ((ntheta (- (car1 'get-theta) 90)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (- (car2 'get-theta) 1)))
+      (let ((ntheta (- (car2 'get-theta) 90)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -149,19 +159,17 @@ slow-car = slow the car
 |#
 
 (define (slow-car num)
-  (list 0 0))
+  (findVelo (ball 'get-velo)))
 
-(define (slow-car-a num)
-  (if (= num 1) (let ((vx (- (car ((car entities) 'get-velo)) 0.02))
-                      (vy (- (cadr ((car entities) 'get-velo)) 0.02)))
-                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
-                                                     (list vx vy)
-                                                     ((car entities) 'theta))))
-      (let ((vx (- (car ((cadr entities) 'get-velo)) 0.02))
-            (vy (- (cadr ((cadr entities) 'get-velo)) 0.02)))
-        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
-                                            (list vx vy)
-                                            ((cadr entities) 'theta))))))
+(define (slow-car-s num)
+  (if (= num 1) (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
+                  ((car1 'update-car)(list (car1 'get-pos)
+                                                     (thetaXY (list (car1 'get-theta) vn))
+                                                     (car1 'theta))))
+      (let ((vn (- (findVelo (car2 'get-velo)) 0.02)))
+        ((car2 'update-car)(list (car2 'get-pos)
+                                 (thetaXY (list (car2 'get-theta) vn))
+                                 (car2 'theta))))))
        
 #|
 accelerate-car = accelerate the car
@@ -174,16 +182,14 @@ accelerate-car = accelerate the car
   (car1 'get-theta))
 
 (define (accelerate-car-s num)
-  (if (= num 1) (let ((vx (+ (car ((car entities) 'get-velo)) 0.02))
-                      (vy (+ (cadr ((car entities) 'get-velo)) 0.02)))
-                  (((car entities) 'update-car)(list ((car entities) 'get-pos)
-                                                     (list vx vy)
-                                                     ((car entities) 'theta))))
-      (let ((vx (+ (car ((cadr entities) 'get-velo)) 0.02))
-            (vy (+ (cadr ((cadr entities) 'get-velo)) 0.02)))
-        (((cadr entities) 'update-car)(list ((cadr entities) 'get-pos)
-                                            (list vx vy)
-                                            ((cadr entities) 'theta))))))
+  (if (= num 1) (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
+                  ((car1 'update-car)(list (car1 'get-pos)
+                                                     (thetaXY (list (car1 'get-theta) vn))
+                                                     (car1 'theta))))
+      (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
+        ((car2 'update-car)(list (car2 'get-pos)
+                                 (thetaXY (list (car2 'get-theta) vn))
+                                 (car2 'theta))))))
 
 #|
 update = updates positions and velocities
@@ -194,8 +200,8 @@ update = updates positions and velocities
 
 (define (update w)
   ((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
-  #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))
-  ((ball 'update-car) (carPos (ball 'get-pos) (ball 'get-velo)))|#)
+  #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))|#
+  ((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 
@@ -226,3 +232,4 @@ ballNewPos = calculates new ball x position
         [(and (equal? axis 'x)(= (car winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [(and (equal? axis 'y)(= (cadr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [else (+ pos vel)]))
+
