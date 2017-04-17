@@ -6,6 +6,15 @@
 (provide carHitBox)
 
 #|Hit Boxes and How do They Work|#
+<<<<<<< HEAD
+=======
+#|
+TODO:
+ - Colission with walls
+ - Colission with ball
+ - Demo calculations
+|#
+>>>>>>> master
 
 #|
 carHitBox = Calculates the hitbox for a car
