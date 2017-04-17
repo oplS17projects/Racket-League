@@ -10,6 +10,7 @@
 (provide accelerate-car)
 (provide slow-car)
 (provide update)
+(provide activate-boost)
 
 #|Creates new car position (pt mass)|#
 
@@ -230,3 +231,5 @@ ballNewPos = calculates new ball x position
         [(and (equal? axis 'y)(= (cadr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [else (+ pos vel)]))
 
+(define (activate-boost num)
+  "Nothing Implemented")
