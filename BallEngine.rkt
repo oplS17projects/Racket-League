@@ -18,12 +18,11 @@ ballPos = Set the ball's new position
 @return    = List with car position and cdr velocity
 |#
 (define (ballPos pos vel rad)
-  (let* ((nvel (list 10 10)) ;;(currentvel (car vel) (cadr vel) 75))
+  (let* ((nvel (currentvel 50 50 #|(car vel) (cadr vel)|# 75))
          (nXpos (ballNewPos (car pos) (car nvel) rad 'x))
          (nYpos (ballNewPos (cadr pos) (cadr nvel) rad 'y)))
-    ((ball 'update-ball) (list (list 500 375) (list 0 0)))))
-     #|(list (list (car nXpos) (car nYpos))
-                                   (list (cadr nXpos) (cadr nYpos))))))|#
+    ((ball 'update-ball) (list (list (car nXpos) (car nYpos))
+                                   (list (cadr nXpos) (cadr nYpos))))))
 
 #|
 ballNewPos = calculates new ball x position
@@ -49,5 +48,5 @@ update = updates positions and velocities
 (define (update w)
   ;((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
   ;((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))
-  ((ball 'update-ball) (ballPos #|(ball 'get-pos)|#(list 500 375) (list 0.001 0.001) 15))
+  (ballPos #|(ball 'get-pos)|#(list 500 375) (list 0.001 0.001) 15)
   w)
