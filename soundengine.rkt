@@ -12,20 +12,16 @@
 
 ;; Creates a new sound engine
 (define (create-sound-engine)
-  (let ((sound-stream (make-pstream))
-        (music-stream (make-pstream)))
     (define (play-sound-effect sound-name)
-      (pstream-play sound-stream
-                    (find-effect sound-name (sound-effects))))
+      (play (find-effect sound-name (sound-effects))))
     (define (play-music-effect music-name)
-      (pstream-play music-stream
-                    (find-effect music-name (music-effects))))
+      (play (find-effect music-name (music-effects))))
     (define (engine procedure-name)
       (cond ((eq? procedure-name 'play-sound-effect) play-sound-effect)
             ((eq? procedure-name 'play-music-effect) play-music-effect)
             ((eq? procedure-name 'stop) (stop))
             (else (error "Could Not Communicate With Sound Engine"))))
-    engine))
+    engine)
 
 ;; Finds the effects name in a given list based upon a symbol
 (define (find-effect effects-name effects-list)
