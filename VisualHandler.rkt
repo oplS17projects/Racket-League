@@ -84,6 +84,9 @@
                                scene)
                  scene))))
 
+(define (reset-entities)
+    (map reset entities))
+
 ;; Global Objects
 
 ;; The blue car object

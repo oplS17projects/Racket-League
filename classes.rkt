@@ -4,14 +4,19 @@
 (provide make-ball)
 
 (require 2htdp/image)
+
 (provide make-car)
 (provide make-ball)
 (provide make-boost)
 (provide car-width)
 (provide car-length)
+(provide reset)
 
 (define car-width 100)
 (define car-length 50)
+
+(define (reset object)
+    "Resetting Object")
 
 (define (make-car pos theta name color)
   (let ((image (overlay/align "right" "middle" (rectangle (/ car-width 5) car-length "solid" "black")(rectangle car-width car-length "solid" color)))
