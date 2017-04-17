@@ -29,7 +29,7 @@
             ((eq? m 'get-theta) theta)
             ((eq? m 'get-image) (rotate theta image))
             ((eq? m 'get-name) name)
-            (else "wat")))
+            (else "Invalid message passed to car object.")))
     dispatch))
 
 (define (make-ball pos radius)
@@ -45,6 +45,6 @@
             ((eq? m 'get-velo) velocity)
             ((eq? m 'update-ball) update-b)
             ((eq? m 'get-image) image)
-            (else "wat")))
+            (else "Invalid message passed to ball object.")))
     dispatch))
     
