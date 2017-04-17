@@ -1,6 +1,6 @@
 #lang racket
 #|For testing|#
-(define winSize (list 200 400))
+(define winSize (list 1000 750))
 
 (require "classes.rkt")
 (require "VisualHandler.rkt")
@@ -9,8 +9,10 @@
 (provide right-turn)
 (provide accelerate-car)
 (provide slow-car)
-(provide update)
 (provide activate-boost)
+(provide carPos)
+(provide currentvel)
+(provide getAxis)
 
 #|Creates new car position (pt mass)|#
 
@@ -60,8 +62,7 @@ currentvel = calculates the current velocity of the object
   (let* ((v (findVelo (list vx vy)))
          (c (if (= v 0) 0 (acos (/ vx v)))))
     (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
-          [(= 0 v) (list 0 0)]
-          [(> 0 v) (list 0 0)]
+          [(>= 0 v) (list 0 0)]
           [(> v max)(list (- (* max (cos c)) 0.001)
                       (- (* max (sin c)) 0.001))])))
 
@@ -162,14 +163,18 @@ slow-car = slow the car
 |#
 (define (slow-car num)
   (if (= num 1)
-      (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
-                  ((car1 'update-car)(list (car1 'get-pos)
-                                                     (thetaXY (list (car1 'get-theta) vn))
-                                                     (car1 'get-theta))))
-      (let ((vn (- (findVelo (car2 'get-velo)) 0.02)))
-        ((car2 'update-car)(list (car2 'get-pos)
-                                 (thetaXY (list (car2 'get-theta) vn))
-                                 (car2 'get-theta))))))
+      (if (car1 'decel?)
+          (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
+            ((car1 'update-car)(list (car1 'get-pos)
+                                     (thetaXY (list (car1 'get-theta) vn))
+                                     (car1 'get-theta))))
+          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
+      (if (car2 'decel?)
+          (let ((vn (- (findVelo (car2 'get-velo)) 0.02)))
+            ((car2 'update-car)(list (car2 'get-pos)
+                                     (thetaXY (list (car2 'get-theta) vn))
+                                     (car2 'get-theta))))
+          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
        
 #|
 accelerate-car = accelerate the car
@@ -177,59 +182,21 @@ accelerate-car = accelerate the car
 @param num = which car
 @return    = new velocity
 |#
+
 (define (accelerate-car num)
   (if (= num 1)
-      (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
-                  ((car1 'update-car)(list (car1 'get-pos)
-                                                     (thetaXY (list (car1 'get-theta) vn))
-                                                     (car1 'get-theta))))
-      (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
-        ((car2 'update-car)(list (car2 'get-pos)
-                                 (thetaXY (list (car2 'get-theta) vn))
-                                 (car2 'get-theta))))))
-
-#|
-update = updates positions and velocities
-
-@param lst = list of everything
-@return    = updated everything
-|#
-
-(define (update w)
-  (world-state 'tic))
-  #|((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))|#
-  #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))|#
-  ;;((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))
-
-#|Ball physics.  Similar to car, but bounces off edges|#
-
-#|
-ballPos = Set the ball's new position
-
-@param pos = the position of the ball
-@param vel = the velocity of the ball
-@param rad = the radius of the ball
-@return    = List with car position and cdr velocity
-|#
-(define (ballPos pos vel rad)
-  (let* ((nvel (currentvel (car vel) (cadr vel) 75))
-         (nXpos (ballNewPos (car pos) (car nvel) rad 'x))
-         (nYpos (ballNewPos (cadr pos) (cadr nvel) rad 'y)))
-    (list (list nXpos nYpos) nvel)))
-
-#|
-ballNewPos = calculates new ball x position
-
-@param pos = position
-@param vel = velocity
-@param rad = ball radius
-@return    = new position and velocity
-|#
-(define (ballNewPos pos vel rad axis)
-  (cond [(= 0 (- pos rad)) (list (- pos vel) (- vel))]
-        [(and (equal? axis 'x)(= (car winSize) (+ pos rad))) (list (- pos vel) (- vel))]
-        [(and (equal? axis 'y)(= (cadr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
-        [else (+ pos vel)]))
+      (if (car1 'accel?)
+          (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
+            ((car1 'update-car)(list (car1 'get-pos)
+                                     (thetaXY (list (car1 'get-theta) vn))
+                                     (car1 'get-theta))))
+          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
+      (if (car2 'accel?)
+          (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
+            ((car2 'update-car)(list (car2 'get-pos)
+                                     (thetaXY (list (car2 'get-theta) vn))
+                                     (car2 'get-theta))))
+          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
 
 (define (activate-boost num)
   "Nothing Implemented")

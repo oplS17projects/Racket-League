@@ -99,7 +99,7 @@
 
 (define (make-ball pos radius)
   (let ((image (circle radius "solid" "black"))
-        (velocity '(0 0)))
+        (velocity '(5 5)))
     (define (update-b lst)
       (set! pos (car lst))
       (set! velocity (cadr lst)))

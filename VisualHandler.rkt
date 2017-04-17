@@ -24,7 +24,7 @@
 
 
 (define (create-menu-state)
-  (let ((shouldShow #t))
+  (let ((shouldShow #f))
     (define (ShowMenu?)
       shouldShow)
     (define (SwitchToGame)

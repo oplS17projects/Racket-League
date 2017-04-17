@@ -5,9 +5,11 @@
 ;; Racket Libraries
 (require 2htdp/image)
 (require 2htdp/universe)
+(require rsound)
 
 ;; Custom Libraries
 (require "PhysicsEngine.rkt")
+(require "BallEngine.rkt")
 (require "keylistener.rkt")
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
