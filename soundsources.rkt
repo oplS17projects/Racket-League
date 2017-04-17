@@ -9,7 +9,7 @@
   (list
    (list 'goal-scored (rs-read "goal.wav"))
    (list 'explosion (rs-read "explosion.wav"))
-   (list 'accelerate (rs-read "accelerate.wav"))
+   (list 'accelerate (rs-read "acceleration.wav"))
    (list 'blue-scored (rs-read "blue-player-scored.wav"))
    (list 'orange-scored (rs-read "orange-player-scored.wav"))
    (list 'start-game (rs-read "start-game.wav"))

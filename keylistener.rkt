@@ -16,7 +16,7 @@
         (else w)))
 
 (define (game-key-listener w ke)
-  (cond ((key=? ke "left") (left-turn 2) ((sound-engine 'play-sound-effect) 'goal-scored))
+  (cond ((key=? ke "left") (left-turn 2))
         ((key=? ke "right") (right-turn 2))
         ((key=? ke "down") (slow-car 2))
         ((key=? ke "up") (accelerate-car 2))
