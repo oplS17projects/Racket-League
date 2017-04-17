@@ -196,7 +196,7 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  w)
+  (world-state 'tic))
   #|((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))|#
   #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))|#
   ;;((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))

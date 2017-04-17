@@ -17,8 +17,11 @@
 (provide menu-background)
 (provide draw-entities)
 (provide menu-state)
+(provide world-state)
 (provide space-key-pressed)
 (provide escape-key-pressed)
+
+
 
 (define (create-menu-state)
   (let ((shouldShow #t))
@@ -71,7 +74,13 @@
 (define (draw-entities t)
     (if (menu-state 'ShowMenu?)
         menu-background
-        (rhelp entities background)))
+        (rhelp entities (place-image (world-state 'get-scoreboard)
+                                     500
+                                     30                                     
+                                     (place-image (world-state 'get-timer)
+                                                  500
+                                                  720
+                                                  background)))))
 
 (define (rhelp lst scene)
   (if (null? lst)
@@ -83,9 +92,6 @@
                                ((car lst) 'get-y)
                                scene)
                  scene))))
-
-(define (reset-entities)
-    (map reset entities))
 
 ;; Global Objects
 
@@ -115,3 +121,6 @@
 
 ;; The menu image
 (define menu-background (bitmap/file "Menu.png"))
+
+;;State of game
+(define world-state (make-game))
