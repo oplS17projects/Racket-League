@@ -5,7 +5,13 @@
 (require "soundengine.rkt")
 (provide carHitBox)
 
-#|Hit Boxes and How do they Work|#
+#|Hit Boxes and How do They Work|#
+#|
+TODO:
+ - Colission with walls
+ - Colission with ball
+ - Demo calculations
+|#
 
 #|
 carHitBox = Calculates the hitbox for a car
