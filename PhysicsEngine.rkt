@@ -13,7 +13,6 @@
 (provide currentvel)
 (provide winSize)
 
-
 #|Creates new car position (pt mass)|#
 
 #|
@@ -116,9 +115,6 @@ findVelo = finds regular velocity
 @return     = value
 |#
 
-(define (turnLeft vel)
-  (#t))
-
 (define (findVelo comp)
   (sqrt (+ (* (car comp) (car comp))
            (* (cadr comp) (cadr comp)))))
@@ -132,11 +128,11 @@ left-turn = turn the car left
 
 (define (left-turn num)
   (if (= num 1)
-      (let ((ntheta (+ (car1 'get-theta) 5)))
+      (let ((ntheta (+ (car1 'get-theta) 15)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (+ (car2 'get-theta) 5)))
+      (let ((ntheta (+ (car2 'get-theta) 15)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -150,11 +146,11 @@ right-turn = turn the car right
 
 (define (right-turn num)
   (if (= num 1)
-      (let ((ntheta (- (car1 'get-theta) 5)))
+      (let ((ntheta (- (car1 'get-theta) 15)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (- (car2 'get-theta) 5)))
+      (let ((ntheta (- (car2 'get-theta) 15)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -165,12 +161,7 @@ slow-car = slow the car
 @param num = which car
 @return    = new velocity
 |#
-
 (define (slow-car num)
-  (if (= num 1) ((car1 'set-acc) #f)
-      ((car2 'set-acc) #f)))
-
-(define (slow-car-old num)
   (if (= num 1)
       (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
@@ -187,35 +178,14 @@ accelerate-car = accelerate the car
 @param num = which car
 @return    = new velocity
 |#
-
 (define (accelerate-car num)
-  (if (= num 1) ((car1 'set-acc) #t)
-      ((car2 'set-acc) #t)))
-
-(define (accelerate-car-old num)
   (if (= num 1)
-      (if (car1 'get-acc)
-          (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
+      (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
                                                      (car1 'get-theta))))
-<<<<<<< HEAD
-          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
-      (if (car2 'get-acc)
-          (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
-            ((car2 'update-car)(list (car2 'get-pos)
-                                     (thetaXY (list (car2 'get-theta) vn))
-                                     (car2 'get-theta))))
-          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
-=======
       (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
         ((car2 'update-car)(list (car2 'get-pos)
                                  (thetaXY (list (car2 'get-theta) vn))
                                  (car2 'get-theta))))))
-
-#|
-update = updates positions and velocities
->>>>>>> b0e8bcbebcf04368b3e7e9bb832d901fe353be63
-
-
 
