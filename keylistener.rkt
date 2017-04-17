@@ -9,7 +9,6 @@
 ;; Custom Libraries
 (require "PhysicsEngine.rkt")
 (require "VisualHandler.rkt")
-(require "soundengine.rkt")
 
 (define (menu-key-listener w ke)
   (cond ((key=? ke " ") (space-key-pressed) w)

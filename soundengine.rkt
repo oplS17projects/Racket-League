@@ -1,7 +1,7 @@
 #lang racket
 
 ;; Exposed Procedures
-(provide sound-engine)
+(provide create-sound-engine)
 
 ;; Racket libraries
 (require rsound)
@@ -9,6 +9,9 @@
 
 ;; Custom Libraries
 (require "soundsources.rkt")
+
+;; Provides
+(provide sound-engine)
 
 ;; Creates a new sound engine
 (define (create-sound-engine)
@@ -33,7 +36,6 @@
         ((null? rest-of-list) (error "Could Not Find Effect"))
         (else (effects-list-iter effects-name (car rest-of-list) (cdr rest-of-list)))))
 
-;; The instantiated sound-engine we want to use throughout to handle music
 (define sound-engine (create-sound-engine))
 
 ;; This code handles playing music or sound effects using the RSound library
