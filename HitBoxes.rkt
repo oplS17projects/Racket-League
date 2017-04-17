@@ -4,6 +4,7 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 (provide carHitBox)
+(provide ptG)
 
 #|Hit Boxes and How do They Work|#
 

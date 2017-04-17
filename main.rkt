@@ -5,6 +5,7 @@
 ;; Racket Libraries
 (require 2htdp/image)
 (require 2htdp/universe)
+(require rsound)
 
 ;; Custom Libraries
 (require "PhysicsEngine.rkt")
