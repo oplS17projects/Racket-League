@@ -21,8 +21,8 @@ ballPos = Set the ball's new position
   (let* ((nvel (currentvel (car vel) (cadr vel) 75))          #|Sets balls velocity|#
          (nXpos (ballNewPos (car pos) (car nvel) rad 'x))     #|Finds x pos and vel|#
          (nYpos (ballNewPos (cadr pos) (cadr nvel) rad 'y)))  #|Finds y pos and vel|#
-    (ballHitCar car1)
-    (ballHitCar car2)
+    ((ball 'update-ball) (ballHitCar car1))
+    ((ball 'update-ball) (ballHitCar car2))
     ((ball 'update-ball) (list (list (car nXpos) (car nYpos))
                                    (list (cadr nXpos) (cadr nYpos))))))
 
@@ -68,15 +68,14 @@ H     G      B
          (G (caddr hb))      #|pt G car|#
          (H (cadddr hb)))    #|pt H car|#
     (cond [(and (ptG B E) (ptG G B))  #|Is B inside|#
-           ((ball 'update-ball) (list T (list vx (- vy))))]
+           (list T (list vx (- vy)))]
           [(and (ptG T E) (ptG G T))  #|Is T inside|#
-           ((ball 'update-ball) (list B (list vx (- vy))))]
+           (list B (list vx (- vy)))]
           [(and (ptG R E) (ptG G R))  #|Is R inside|#
            ((ball 'update-ball) (list L (list (- vx) vy)))]
           [(and (ptG L E) (ptG G L))  #|Is L inside|#
-           ((ball 'update-ball) (list R (list (- vx) vy)))]
-          [else ((ball 'update-ball) (list (list bx by) (list vx vy)))
-           #|(list (list T B L R) (list E F G H))|#])))
+           (list R (list (- vx) vy))]
+          [else (list (list bx by) (list vx vy))])))
 
 #|
 update = updates positions and velocities
