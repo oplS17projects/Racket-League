@@ -13,7 +13,8 @@
 (provide background)
 (provide draw-entities)
 (provide menu-state)
-(provide enter-key-pressed)
+(provide space-key-pressed)
+(provide escape-key-pressed)
 
 (define car1 (make-car '(200 375) 0 "Player1" "blue"))
 
@@ -25,14 +26,16 @@
 
 (define background (bitmap/file "Field.png"))
 
+(define menu-background (bitmap/file "Menu.png"))
+
 (define (create-menu-state)
   (let ((shouldShow #t))
     (define (ShowMenu?)
       shouldShow)
     (define (SwitchToGame)
-      (begin (set! shouldShow #f)))
+      (begin (set! shouldShow #f) (sound-engine 'stop)))
     (define (SwitchToMenu)
-      (begin (set! shouldShow #t)))
+      (begin (set! shouldShow #t) (sound-engine 'stop) ((sound-engine 'play-music-effect) 'menu-music)))
     (define (dispatch message)
       (cond ((eq? message 'ShowMenu?) (ShowMenu?))
             ((eq? message 'SwitchToGame) (SwitchToGame))
@@ -40,26 +43,26 @@
             (else (error "Could Not Determine Menu State"))))
     dispatch))
 
-(define (enter-key-pressed)
+(define (space-key-pressed)
   (if (= 0 (menu 'get-selection))
       (menu-state 'SwitchToGame)
       "Nothing to do"))
 
+(define (escape-key-pressed)
+  ((sound-engine 'play-music-effect) 'menu-music)
+  (menu-state 'SwitchToMenu))
+
 (define menu-state (create-menu-state))
 
 (define (create-menu)
-  (let ((selection 0)
-        (start-box 0))
+  (let ((selection 0))
     (define (get-selection)
       selection)
     (define (update-selection number)
       (begin (set! selection (+ selection number))))
-    (define (get-start-box)
-      start-box)
     (define (dispatch message)
       (cond ((eq? message 'get-selection) (get-selection))
             ((eq? message 'update-selection) update-selection)
-            ((eq? message 'get-start-box) (get-start-box))
             (else (error "Could Not Communicate With Menu"))))
     dispatch))
 
@@ -69,10 +72,9 @@
   scene)
 
 (define (draw-entities t)
-  (let ((menu-state (create-menu-state)))
     (if (menu-state 'ShowMenu?)
-        (draw-menu background)
-        (rhelp entities background))))
+        menu-background
+        (rhelp entities background)))
 
 (define (rhelp lst scene)
       (if (null? lst)
