@@ -88,10 +88,13 @@
 (define (draw-entities t)
     (if (menu-state 'ShowMenu?)
         menu-background
-        (rhelp entities (place-image (world-state 'get-time)
+        (rhelp entities (place-image (world-state 'get-scoreboard)
                                      500
-                                     720
-                                     background))))
+                                     30                                     
+                                     (place-image (world-state 'get-timer)
+                                                  500
+                                                  720
+                                                  background)))))
 
 (define (rhelp lst scene)
   (if (null? lst)
