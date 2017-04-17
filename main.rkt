@@ -12,8 +12,8 @@
 (require "VisualHandler.rkt")
 
 (big-bang 0
-          (display-mode 'fullscreen)
           (on-key key-handler)
           (on-tick update .03)
-          (to-draw draw-entities))
+          (to-draw draw-entities)
+          (name "Racket-League"))
 
