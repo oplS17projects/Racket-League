@@ -164,11 +164,11 @@ slow-car = slow the car
       (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
-                                                     (car1 'theta))))
+                                                     (car1 'get-theta))))
       (let ((vn (- (findVelo (car2 'get-velo)) 0.02)))
         ((car2 'update-car)(list (car2 'get-pos)
                                  (thetaXY (list (car2 'get-theta) vn))
-                                 (car2 'theta))))))
+                                 (car2 'get-theta))))))
        
 #|
 accelerate-car = accelerate the car
@@ -181,11 +181,11 @@ accelerate-car = accelerate the car
       (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
-                                                     (car1 'theta))))
+                                                     (car1 'get-theta))))
       (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
         ((car2 'update-car)(list (car2 'get-pos)
                                  (thetaXY (list (car2 'get-theta) vn))
-                                 (car2 'theta))))))
+                                 (car2 'get-theta))))))
 
 #|
 update = updates positions and velocities
