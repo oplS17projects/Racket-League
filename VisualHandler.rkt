@@ -85,7 +85,7 @@
       (if (null? lst)
           scene
           (rhelp (cdr lst)
-                 (if ((car lst) 'isActive)
+                 (if ((car lst) 'active?)
                      (place-image  ((car lst) 'get-image)
                                    ((car lst) 'get-x)
                                    ((car lst) 'get-y)
