@@ -12,6 +12,7 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 
+;; Start of the Main Procedure
 ((sound-engine 'play-music-effect) 'menu-music)
 
 (big-bang 0

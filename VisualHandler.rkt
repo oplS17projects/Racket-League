@@ -4,49 +4,38 @@
 
 (require 2htdp/universe)
 (require 2htdp/image)
+
 (require "soundengine.rkt")
 
+;; Provides
 (provide car1)
 (provide car2)
 (provide ball)
 (provide entities)
 (provide boost-list)
 (provide background)
+(provide menu-background)
 (provide draw-entities)
 (provide menu-state)
+(provide world-state)
 (provide space-key-pressed)
 (provide escape-key-pressed)
 
-(define car1 (make-car '(200 375) 0 "Player1" "blue"))
 
-(define car2 (make-car '(800 375) 180 "Player2" "orange"))
-
-(define boost1 (make-boost '(30 30)))
-
-(define boost2 (make-boost '(30 720)))
-
-(define boost3 (make-boost '(970 30)))
-
-(define boost4 (make-boost '(970 720)))
-
-(define ball (make-ball '(500 375) 15))
-
-(define entities (list car1 car2 ball boost1 boost2 boost3 boost4))
-
-(define boost-list (list boost1 boost2 boost3 boost4))
-
-(define background (bitmap/file "Field.png"))
-
-(define menu-background (bitmap/file "Menu.png"))
 
 (define (create-menu-state)
   (let ((shouldShow #t))
     (define (ShowMenu?)
       shouldShow)
     (define (SwitchToGame)
-      (begin (set! shouldShow #f) (sound-engine 'stop)))
+      (begin (set! shouldShow #f)
+             (sound-engine 'stop)
+             ((sound-engine 'play-sound-effect) 'start-game)))
     (define (SwitchToMenu)
-      (begin (set! shouldShow #t) (sound-engine 'stop) ((sound-engine 'play-music-effect) 'menu-music)))
+      (begin (set! shouldShow #t)
+             (sound-engine 'stop)
+             ((sound-engine 'play-sound-effect) 'stop-game)
+             ((sound-engine 'play-music-effect) 'menu-music)))
     (define (dispatch message)
       (cond ((eq? message 'ShowMenu?) (ShowMenu?))
             ((eq? message 'SwitchToGame) (SwitchToGame))
@@ -85,7 +74,13 @@
 (define (draw-entities t)
     (if (menu-state 'ShowMenu?)
         menu-background
-        (rhelp entities background)))
+        (rhelp entities (place-image (world-state 'get-scoreboard)
+                                     500
+                                     30                                     
+                                     (place-image (world-state 'get-timer)
+                                                  500
+                                                  720
+                                                  background)))))
 
 (define (rhelp lst scene)
   (if (null? lst)
@@ -98,3 +93,34 @@
                                scene)
                  scene))))
 
+;; Global Objects
+
+;; The blue car object
+(define car1 (make-car '(200 375) 0 "Player1" "blue"))
+
+;; The orange car object
+(define car2 (make-car '(800 375) 180 "Player2" "orange"))
+
+;; The ball object
+(define ball (make-ball '(500 375) 15))
+
+;; The boost objects
+(define boost1 (make-boost '(30 30)))
+(define boost2 (make-boost '(30 720)))
+(define boost3 (make-boost '(970 30)))
+(define boost4 (make-boost '(970 720)))
+
+;; The list of entities
+(define entities (list car1 car2 ball boost1 boost2 boost3 boost4))
+
+;; The list of boost objects
+(define boost-list (list boost1 boost2 boost3 boost4))
+
+;; The background image
+(define background (bitmap/file "Field.png"))
+
+;; The menu image
+(define menu-background (bitmap/file "Menu.png"))
+
+;;State of game
+(define world-state (make-game))

@@ -10,6 +10,7 @@
 (provide accelerate-car)
 (provide slow-car)
 (provide update)
+(provide activate-boost)
 
 #|Creates new car position (pt mass)|#
 
@@ -195,7 +196,7 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  w)
+  (world-state 'tic))
   #|((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))|#
   #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))|#
   ;;((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))
@@ -230,3 +231,5 @@ ballNewPos = calculates new ball x position
         [(and (equal? axis 'y)(= (cadr winSize) (+ pos rad))) (list (- pos vel) (- vel))]
         [else (+ pos vel)]))
 
+(define (activate-boost num)
+  "Nothing Implemented")
