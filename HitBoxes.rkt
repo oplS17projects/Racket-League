@@ -5,7 +5,7 @@
 (require "soundengine.rkt")
 (provide carHitBox)
 
-#|Hit Boxes and How do they Work|#
+#|Hit Boxes and How do They Work|#
 
 #|
 carHitBox = Calculates the hitbox for a car

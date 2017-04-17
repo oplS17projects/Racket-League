@@ -1,6 +1,6 @@
 #lang racket
 #|For testing|#
-(define winSize (list 200 400))
+(define winSize (list 1000 750))
 
 (require "classes.rkt")
 (require "VisualHandler.rkt")
@@ -9,7 +9,7 @@
 (provide right-turn)
 (provide accelerate-car)
 (provide slow-car)
-(provide update)
+(provide carPos)
 (provide currentvel)
 (provide winSize)
 
@@ -167,6 +167,10 @@ slow-car = slow the car
 |#
 
 (define (slow-car num)
+  (if (= num 1) ((car1 'set-acc) #f)
+      ((car2 'set-acc) #f)))
+
+(define (slow-car-old num)
   (if (= num 1)
       (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
@@ -185,23 +189,23 @@ accelerate-car = accelerate the car
 |#
 
 (define (accelerate-car num)
+  (if (= num 1) ((car1 'set-acc) #t)
+      ((car2 'set-acc) #t)))
+
+(define (accelerate-car-old num)
   (if (= num 1)
-      (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
+      (if (car1 'get-acc)
+          (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
                                                      (car1 'get-theta))))
-      (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
-        ((car2 'update-car)(list (car2 'get-pos)
-                                 (thetaXY (list (car2 'get-theta) vn))
-                                 (car2 'get-theta))))))
+          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
+      (if (car2 'get-acc)
+          (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
+            ((car2 'update-car)(list (car2 'get-pos)
+                                     (thetaXY (list (car2 'get-theta) vn))
+                                     (car2 'get-theta))))
+          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
 
-#|
-update = updates positions and velocities
 
-@param lst = list of everything
-@return    = updated everything
-|#
-
-(define (update w)
-  w)
 
