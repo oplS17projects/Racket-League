@@ -199,6 +199,7 @@ accelerate-car = accelerate the car
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
                                                      (car1 'get-theta))))
+<<<<<<< HEAD
           ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
       (if (car2 'get-acc)
           (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
@@ -206,6 +207,15 @@ accelerate-car = accelerate the car
                                      (thetaXY (list (car2 'get-theta) vn))
                                      (car2 'get-theta))))
           ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
+=======
+      (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
+        ((car2 'update-car)(list (car2 'get-pos)
+                                 (thetaXY (list (car2 'get-theta) vn))
+                                 (car2 'get-theta))))))
+
+#|
+update = updates positions and velocities
+>>>>>>> b0e8bcbebcf04368b3e7e9bb832d901fe353be63
 
 
 

@@ -10,29 +10,43 @@
 (provide car2)
 (provide ball)
 (provide entities)
+(provide boost-list)
 (provide background)
 (provide draw-entities)
 (provide menu-state)
-(provide enter-key-pressed)
+(provide space-key-pressed)
+(provide escape-key-pressed)
 
 (define car1 (make-car '(200 375) 0 "Player1" "blue"))
 
 (define car2 (make-car '(800 375) 180 "Player2" "orange"))
 
+(define boost1 (make-boost '(30 30)))
+
+(define boost2 (make-boost '(30 720)))
+
+(define boost3 (make-boost '(970 30)))
+
+(define boost4 (make-boost '(970 720)))
+
 (define ball (make-ball '(500 375) 15))
 
-(define entities (list car1 car2 ball))
+(define entities (list car1 car2 ball boost1 boost2 boost3 boost4))
+
+(define boost-list (list boost1 boost2 boost3 boost4))
 
 (define background (bitmap/file "Field.png"))
+
+(define menu-background (bitmap/file "Menu.png"))
 
 (define (create-menu-state)
   (let ((shouldShow #f))
     (define (ShowMenu?)
       shouldShow)
     (define (SwitchToGame)
-      (begin (set! shouldShow #f)))
+      (begin (set! shouldShow #f) (sound-engine 'stop)))
     (define (SwitchToMenu)
-      (begin (set! shouldShow #t)))
+      (begin (set! shouldShow #t) (sound-engine 'stop) ((sound-engine 'play-music-effect) 'menu-music)))
     (define (dispatch message)
       (cond ((eq? message 'ShowMenu?) (ShowMenu?))
             ((eq? message 'SwitchToGame) (SwitchToGame))
@@ -40,26 +54,26 @@
             (else (error "Could Not Determine Menu State"))))
     dispatch))
 
-(define (enter-key-pressed)
+(define (space-key-pressed)
   (if (= 0 (menu 'get-selection))
       (menu-state 'SwitchToGame)
       "Nothing to do"))
 
+(define (escape-key-pressed)
+  ((sound-engine 'play-music-effect) 'menu-music)
+  (menu-state 'SwitchToMenu))
+
 (define menu-state (create-menu-state))
 
 (define (create-menu)
-  (let ((selection 0)
-        (start-box 0))
+  (let ((selection 0))
     (define (get-selection)
       selection)
     (define (update-selection number)
       (begin (set! selection (+ selection number))))
-    (define (get-start-box)
-      start-box)
     (define (dispatch message)
       (cond ((eq? message 'get-selection) (get-selection))
             ((eq? message 'update-selection) update-selection)
-            ((eq? message 'get-start-box) (get-start-box))
             (else (error "Could Not Communicate With Menu"))))
     dispatch))
 
@@ -69,16 +83,18 @@
   scene)
 
 (define (draw-entities t)
-  (let ((menu-state (create-menu-state)))
     (if (menu-state 'ShowMenu?)
-        (draw-menu background)
-        (rhelp entities background))))
+        menu-background
+        (rhelp entities background)))
 
 (define (rhelp lst scene)
-      (if (null? lst)
-          scene
-          (rhelp (cdr lst)
+  (if (null? lst)
+      scene
+      (rhelp (cdr lst)
+             (if ((car lst) 'active?)
                  (place-image  ((car lst) 'get-image)
                                ((car lst) 'get-x)
                                ((car lst) 'get-y)
-                               scene))))
+                               scene)
+                 scene))))
+
