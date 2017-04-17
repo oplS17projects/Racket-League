@@ -26,7 +26,7 @@
 (define background (bitmap/file "Field.png"))
 
 (define (create-menu-state)
-  (let ((shouldShow #f))
+  (let ((shouldShow #t))
     (define (ShowMenu?)
       shouldShow)
     (define (SwitchToGame)
@@ -70,7 +70,11 @@
 
 (define (draw-entities t)
   (let ((menu-state (create-menu-state)))
-    (define (rhelp lst scene)
+    (if (menu-state 'ShowMenu?)
+        (draw-menu background)
+        (rhelp entities background))))
+
+(define (rhelp lst scene)
       (if (null? lst)
           scene
           (rhelp (cdr lst)
@@ -78,6 +82,3 @@
                                ((car lst) 'get-x)
                                ((car lst) 'get-y)
                                scene))))
-    (if (menu-state 'ShowMenu?)
-        (draw-menu background)
-        (rhelp entities background))))
