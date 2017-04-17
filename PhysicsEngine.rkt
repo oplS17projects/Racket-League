@@ -125,11 +125,12 @@ left-turn = turn the car left
 |#
 
 (define (left-turn num)
-  (if (= num 1) (let ((ntheta (+ (car1 'get-theta) 90)))
+  (if (= num 1)
+      (let ((ntheta (+ (car1 'get-theta) 15)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (+ (car2 'get-theta) 90)))
+      (let ((ntheta (+ (car2 'get-theta) 15)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -142,11 +143,12 @@ right-turn = turn the car right
 |#
 
 (define (right-turn num)
-  (if (= num 1) (let ((ntheta (- (car1 'get-theta) 90)))
+  (if (= num 1)
+      (let ((ntheta (- (car1 'get-theta) 15)))
                   ((car1 'update-car) (list (car1 'get-pos)
                                             (car1 'get-velo)
                                             ntheta)))
-      (let ((ntheta (- (car2 'get-theta) 90)))
+      (let ((ntheta (- (car2 'get-theta) 15)))
         ((car2 'update-car) (list (car2 'get-pos)
                                   (car2 'get-velo)
                                   ntheta)))))
@@ -157,12 +159,9 @@ slow-car = slow the car
 @param num = which car
 @return    = new velocity
 |#
-
 (define (slow-car num)
-  (findVelo (ball 'get-velo)))
-
-(define (slow-car-s num)
-  (if (= num 1) (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
+  (if (= num 1)
+      (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
                                                      (car1 'theta))))
@@ -177,12 +176,9 @@ accelerate-car = accelerate the car
 @param num = which car
 @return    = new velocity
 |#
-
 (define (accelerate-car num)
-  (car1 'get-theta))
-
-(define (accelerate-car-s num)
-  (if (= num 1) (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
+  (if (= num 1)
+      (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
                   ((car1 'update-car)(list (car1 'get-pos)
                                                      (thetaXY (list (car1 'get-theta) vn))
                                                      (car1 'theta))))
@@ -199,9 +195,10 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  ((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))
+  w)
+  #|((car1 'update-car) (carPos (car1 'get-pos) (car1 'get-velo)))|#
   #|((car2 'update-car) (carPos (car2 'get-pos) (car2 'get-velo)))|#
-  ((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))
+  ;;((ball 'update-ball) (ballPos (ball 'get-pos) (list 0.001 0.001) 15)))
 
 #|Ball physics.  Similar to car, but bounces off edges|#
 

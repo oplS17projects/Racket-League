@@ -13,6 +13,7 @@
 (provide background)
 (provide draw-entities)
 (provide menu-state)
+(provide enter-key-pressed)
 
 (define car1 (make-car '(200 375) 0 "Player1" "blue"))
 
@@ -39,11 +40,30 @@
             (else (error "Could Not Determine Menu State"))))
     dispatch))
 
+(define (enter-key-pressed)
+  (if (= 0 (menu 'get-selection))
+      (menu-state 'SwitchToGame)
+      "Nothing to do"))
+
 (define menu-state (create-menu-state))
 
-;;(define (menu)
-;;  (let ((selection 0)
-;;        (start-box (create-start-box)))))
+(define (create-menu)
+  (let ((selection 0)
+        (start-box 0))
+    (define (get-selection)
+      selection)
+    (define (update-selection number)
+      (begin (set! selection (+ selection number))))
+    (define (get-start-box)
+      start-box)
+    (define (dispatch message)
+      (cond ((eq? message 'get-selection) (get-selection))
+            ((eq? message 'update-selection) update-selection)
+            ((eq? message 'get-start-box) (get-start-box))
+            (else (error "Could Not Communicate With Menu"))))
+    dispatch))
+
+(define menu (create-menu))
 
 (define (draw-menu scene)
   scene)
@@ -56,7 +76,8 @@
           (rhelp (cdr lst)
                  (place-image  ((car lst) 'get-image)
                                ((car lst) 'get-x)
-                               ((car lst) 'get-y) scene))))
+                               ((car lst) 'get-y)
+                               scene))))
     (if (menu-state 'ShowMenu?)
         (draw-menu background)
         (rhelp entities background))))

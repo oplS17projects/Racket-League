@@ -13,7 +13,7 @@
 (define (menu-key-listener w ke)
   (cond ;;((key=? ke "up") (menu-up-pressed))
         ;;((key=? ke "down") (menu-down-pressed))
-        ;;((key=? ke "enter") (enter-key-pressed))
+        ((key=? ke " ") (enter-key-pressed))
         (else w)))
 
 (define (game-key-listener w ke)
