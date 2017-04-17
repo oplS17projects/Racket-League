@@ -7,11 +7,34 @@
 (provide make-car)
 (provide make-ball)
 (provide make-boost)
+(provide make-game)
 (provide car-width)
 (provide car-length)
 
 (define car-width 100)
 (define car-length 50)
+
+(define (make-game)
+  (let ((tics 0)
+        (score '(0 0))
+        (game-time 120)) ; Game total time in seconds
+    (define (dispatch m)
+      (cond ((eq? m 'get-tics) tics)
+            ((eq? m 'tic) (set! tics (add1 tics)))
+            ((eq? m 'get-score) score)
+            ((eq? m 'left-score) (set! score (list (add1 (car score)) (cadr score))))
+            ((eq? m 'right-score) (set! score (list (car score) (add1 (cadr score)))))
+            ((eq? m 'get-time) (text/font
+                                (seconds->timer (- game-time (tics->seconds tics)))
+                                60
+                                "red"
+                                #f
+                                'modern
+                                'normal
+                                'bold
+                                #f))
+            (else "Invalid message passed to game object.")))
+    dispatch))
 
 (define (make-car pos theta name color)
   (let ((image (overlay/align "right" "middle" (rectangle (/ car-width 5) car-length "solid" "black")(rectangle car-width car-length "solid" color)))
@@ -75,3 +98,18 @@
                                   (set! recharge-time (- recharge-time 1))))
             (else "Invalid message passed to boost object.")))
     dispatch))
+
+(define (seconds->timer s)
+  (let* ((mins (quotient s 60))
+        (secs (remainder s 60))
+        (min-string (number->string mins))
+        (sec-string (number->string secs)))
+    (string-append
+     min-string
+     ":"
+     (if (= (string-length sec-string) 1)
+         (string-append "0" sec-string)
+         sec-string))))
+
+(define (tics->seconds tic)
+  (quotient tic 30))

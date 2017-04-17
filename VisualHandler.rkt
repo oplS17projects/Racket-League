@@ -14,6 +14,7 @@
 (provide background)
 (provide draw-entities)
 (provide menu-state)
+(provide world-state)
 (provide space-key-pressed)
 (provide escape-key-pressed)
 
@@ -38,6 +39,8 @@
 (define background (bitmap/file "Field.png"))
 
 (define menu-background (bitmap/file "Menu.png"))
+
+(define world-state (make-game))
 
 (define (create-menu-state)
   (let ((shouldShow #t))
@@ -85,7 +88,10 @@
 (define (draw-entities t)
     (if (menu-state 'ShowMenu?)
         menu-background
-        (rhelp entities background)))
+        (rhelp entities (place-image (world-state 'get-time)
+                                     500
+                                     720
+                                     background))))
 
 (define (rhelp lst scene)
   (if (null? lst)
