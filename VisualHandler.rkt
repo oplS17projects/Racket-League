@@ -10,6 +10,7 @@
 (provide car2)
 (provide ball)
 (provide entities)
+(provide boost-list)
 (provide background)
 (provide draw-entities)
 (provide menu-state)
@@ -19,9 +20,19 @@
 
 (define car2 (make-car '(800 375) 180 "Player2" "orange"))
 
+(define boost1 (make-boost '(30 30)))
+
+(define boost2 (make-boost '(30 720)))
+
+(define boost3 (make-boost '(970 30)))
+
+(define boost4 (make-boost '(970 720)))
+
 (define ball (make-ball '(500 375) 15))
 
-(define entities (list car1 car2 ball))
+(define entities (list car1 car2 ball boost1 boost2 boost3 boost4))
+
+(define boost-list (list boost1 boost2 boost3 boost4))
 
 (define background (bitmap/file "Field.png"))
 
@@ -74,10 +85,12 @@
       (if (null? lst)
           scene
           (rhelp (cdr lst)
-                 (place-image  ((car lst) 'get-image)
-                               ((car lst) 'get-x)
-                               ((car lst) 'get-y)
-                               scene))))
+                 (if ((car lst) 'isActive)
+                     (place-image  ((car lst) 'get-image)
+                                   ((car lst) 'get-x)
+                                   ((car lst) 'get-y)
+                                   scene)
+                     scene))))      
     (if (menu-state 'ShowMenu?)
         (draw-menu background)
         (rhelp entities background))))
