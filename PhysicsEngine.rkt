@@ -28,7 +28,7 @@ carpos = the new position of the car
   (let* ((nvel (currentvel (car vel) (cadr vel) 50))
          (nXpos (newPos (car pos) (car nvel) 'x))
          (nYpos (newPos (cadr pos) (cadr nvel) 'y)))
-    (list (list nXpos nYpos) nvel (ftheta nvel))))
+    (list (list nXpos nYpos) nvel)))
 
 #|
 newPos = changes a position based on a velocity
@@ -61,8 +61,8 @@ currentvel = calculates the current velocity of the object
 (define (currentvel vx vy max)
   (let* ((v (findVelo (list vx vy)))
          (c (if (= v 0) 0 (acos (/ vx v)))))
-    (cond [(> max v) (list (- vx 0.001) (- vy 0.001))]
-          [(>= 0 v) (list 0 0)]
+    (cond [(= 0 v) (list 0 0)]
+          [(> max v) (list (- vx 0.001) (- vy 0.001))]
           [(> v max)(list (- (* max (cos c)) 0.001)
                       (- (* max (sin c)) 0.001))])))
 
@@ -164,17 +164,15 @@ slow-car = slow the car
 (define (slow-car num)
   (if (= num 1)
       (if (car1 'decel?)
-          (let ((vn (- (findVelo (car1 'get-velo)) 0.02)))
-            ((car1 'update-car)(list (car1 'get-pos)
-                                     (thetaXY (list (car1 'get-theta) vn))
-                                     (car1 'get-theta))))
-          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
+          ((car1 'update-car)(list (car1 'get-pos)
+                                     (thetaXY (list (car1 'get-theta) (- (findVelo (car1 'get-velo)) 0.2)))
+                                     (car1 'get-theta)))
+          "Nothing to do")
       (if (car2 'decel?)
-          (let ((vn (- (findVelo (car2 'get-velo)) 0.02)))
-            ((car2 'update-car)(list (car2 'get-pos)
-                                     (thetaXY (list (car2 'get-theta) vn))
-                                     (car2 'get-theta))))
-          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
+          ((car2 'update-car)(list (car2 'get-pos)
+                                     (thetaXY (list (car2 'get-theta) (- (findVelo (car2 'get-velo)) 0.2)))
+                                     (car2 'get-theta)))
+          "Nothing to do")))
        
 #|
 accelerate-car = accelerate the car
@@ -186,17 +184,15 @@ accelerate-car = accelerate the car
 (define (accelerate-car num)
   (if (= num 1)
       (if (car1 'accel?)
-          (let ((vn (+ (findVelo (car1 'get-velo)) 0.02)))
-            ((car1 'update-car)(list (car1 'get-pos)
-                                     (thetaXY (list (car1 'get-theta) vn))
-                                     (car1 'get-theta))))
-          ((car1 'update-car) (list (car1 'get-pos) (car1 'get-velo) (car1 'get-theta))))
+          ((car1 'update-car)(list (car1 'get-pos)
+                                   (thetaXY (list (car1 'get-theta) (+ (findVelo (car1 'get-velo)) 0.2)))
+                                   (car1 'get-theta)))
+          "Nothing to do")
       (if (car2 'accel?)
-          (let ((vn (+ (findVelo (car2 'get-velo)) 0.02)))
-            ((car2 'update-car)(list (car2 'get-pos)
-                                     (thetaXY (list (car2 'get-theta) vn))
-                                     (car2 'get-theta))))
-          ((car2 'update-car) (list (car2 'get-pos) (car2 'get-velo) (car2 'get-theta))))))
+          ((car2 'update-car)(list (car2 'get-pos)
+                                   (thetaXY (list (car2 'get-theta) (+ (findVelo (car2 'get-velo)) 0.2)))
+                                   (car2 'get-theta)))
+          "Nothing to do")))
 
 (define (activate-boost num)
   "Nothing Implemented")

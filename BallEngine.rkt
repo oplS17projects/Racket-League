@@ -85,7 +85,7 @@ update = updates positions and velocities
 |#
 
 (define (update w)
-  (carPos (car1 'get-pos) (car1 'get-velo))
-  (carPos (car2 'get-pos) (car2 'get-velo))
+  ((car1 'update-car) (append (carPos (car1 'get-pos) (car1 'get-velo)) (list (car1 'get-theta))))
+  ((car2 'update-car) (append (carPos (car2 'get-pos) (car2 'get-velo)) (list (car2 'get-theta))))
   (ballPos (ball 'get-pos) (ball 'get-velo) 15)
   w)
