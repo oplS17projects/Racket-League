@@ -72,27 +72,13 @@
         (velocity '(0 0))
         (boost 0)
         (accelerating #f)
-        (decelerating #f)
-        (turning-left #f)
-        (turning-right #f))
+        (decelerating #f))
     (define (update-c lst)
       (set! pos (car lst))
       (set! velocity (cadr lst))
       (set! theta (caddr lst)))
     (define (reset-c oPos oTheta)
-      (update-c (list oPos '(0 0) oTheta)))
-    (define (turn-true direction)
-      (if (eq? direction 'left)
-          (begin
-            (set! turning-left #t)
-            (set! turning-right #f))
-          (begin
-            (set! turning-left #f)
-            (set! turning-right #t))))
-    (define (stop-turning)
-      (begin
-        (set! turning-left #f)
-        (set! turning-right #f)))
+      (update-c (list oPos '(0 0) oTheta)))      
     (define (dispatch m)
       (cond ((eq? m 'get-x) (car pos))
             ((eq? m 'get-y) (cadr pos))
@@ -108,10 +94,6 @@
             ((eq? m 'decel?) decelerating) ; get decel bool
             ((eq? m 'set-decel) (lambda (n) (set! decelerating n))) ; turn decel bool on and off
             ((eq? m 'reset) reset-c)
-            ((eq? m 'turn-true) turn-true)
-            ((eq? m 'stop-turning) (stop-turning))
-            ((eq? m 'turning-left?) turning-left)
-            ((eq? m 'turning-right?) turning-right)
             (else "Invalid message passed to car object.")))
     dispatch))
 

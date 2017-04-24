@@ -126,20 +126,16 @@ left-turn = turn the car left
 @return    = new velocity
 |#
 
-(define (left-turn)
-  (let ((ntheta2 (+ (car2 'get-theta) 1))
-        (ntheta1 (+ (car1 'get-theta) 1)))
-    (begin
-      (if (car1 'turning-left?)
-          ((car1 'update-car) (list (car1 'get-pos)
-                                    (car1 'get-velo)
-                                    ntheta1))
-          "Nothing to do")
-      (if (car2 'turning-left?)
-          ((car2 'update-car) (list (car2 'get-pos)
-                                    (car2 'get-velo)
-                                    ntheta2))
-          "Nothing to do"))))
+(define (left-turn num)
+  (if (= num 1)
+      (let ((ntheta (+ (car1 'get-theta) 15)))
+                  ((car1 'update-car) (list (car1 'get-pos)
+                                            (car1 'get-velo)
+                                            ntheta)))
+      (let ((ntheta (+ (car2 'get-theta) 15)))
+        ((car2 'update-car) (list (car2 'get-pos)
+                                  (car2 'get-velo)
+                                  ntheta)))))
 
 #|
 right-turn = turn the car right
@@ -148,20 +144,16 @@ right-turn = turn the car right
 @return    = new velocity
 |#
 
-(define (right-turn)
-  (let ((ntheta2 (- (car2 'get-theta) 1))
-        (ntheta1 (- (car1 'get-theta) 1)))
-    (begin
-      (if (car1 'turning-right?)
-          ((car1 'update-car) (list (car1 'get-pos)
-                                    (car1 'get-velo)
-                                    ntheta1))
-          "Nothing to do")
-      (if (car2 'turning-right?)
-          ((car2 'update-car) (list (car2 'get-pos)
-                                    (car2 'get-velo)
-                                    ntheta2))
-          "Nothing to do"))))
+(define (right-turn num)
+  (if (= num 1)
+      (let ((ntheta (- (car1 'get-theta) 15)))
+                  ((car1 'update-car) (list (car1 'get-pos)
+                                            (car1 'get-velo)
+                                            ntheta)))
+      (let ((ntheta (- (car2 'get-theta) 15)))
+        ((car2 'update-car) (list (car2 'get-pos)
+                                  (car2 'get-velo)
+                                  ntheta)))))
 
 #|
 slow-car = slow the car
@@ -169,8 +161,8 @@ slow-car = slow the car
 @param num = which car
 @return    = new velocity
 |#
-(define (slow-car)
-  (begin
+(define (slow-car num)
+  (if (= num 1)
       (if (car1 'decel?)
           ((car1 'update-car)(list (car1 'get-pos)
                                      (thetaXY (list (car1 'get-theta) (- (findVelo (car1 'get-velo)) 0.2)))
@@ -189,8 +181,8 @@ accelerate-car = accelerate the car
 @return    = new velocity
 |#
 
-(define (accelerate-car)
-  (begin
+(define (accelerate-car num)
+  (if (= num 1)
       (if (car1 'accel?)
           ((car1 'update-car)(list (car1 'get-pos)
                                    (thetaXY (list (car1 'get-theta) (+ (findVelo (car1 'get-velo)) 0.2)))

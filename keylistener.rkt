@@ -10,22 +10,52 @@
 ;; Custom Libraries
 (require "PhysicsEngine.rkt")
 (require "VisualHandler.rkt")
+(require "soundengine.rkt")
 
 (define (menu-key-listener w ke)
   (cond ((key=? ke " ") (space-key-pressed) w)
         (else w)))
 
 (define (game-key-listener w ke)
-  (cond ((key=? ke "left") (left-turn 2) w)
-        ((key=? ke "right") (right-turn 2) w)
-        ((key=? ke "down") (begin ((car2 'set-decel) #t) (slow-car 2)) w)
-        ((key=? ke "up") (begin ((car2 'set-accel) #t) (accelerate-car 2)) w)
-        ((key=? ke "a") (left-turn 1) w)
-        ((key=? ke "d") (right-turn 1) w)
-        ((key=? ke "s") (begin ((car2 'set-decel) #t) (slow-car 2)) w)
-        ((key=? ke "w") (begin ((car1 'set-accel) #t) (accelerate-car 1)) w)
-        ((key=? ke "escape") (escape-key-pressed) w)
-        (else w)))
+  (let ((sound-engine (create-sound-engine)))
+    (cond ((key=? ke "left") (begin
+                               ((car2 'turn-true) 'left)
+                               w))
+          ((key=? ke "right") (begin
+                                ((car2 'turn-true) 'right)
+                                w))
+          ((key=? ke "down") (if (car2 'decel?)
+                                 w
+                                 (begin
+                                   ((car2 'set-decel) #t)
+                                   w)))
+          ((key=? ke "up") (if (car2 'accel?)
+                               w
+                               (begin
+                                 ((car2 'set-accel) #t)
+                                 ((sound-engine 'play-sound-effect) 'accelerate)
+                                 w)))
+          ((key=? ke "a") (begin
+                           ((car1 'turn-true) 'left)
+                           w))
+          ((key=? ke "d") (begin
+                            ((car1 'turn-true) 'right)
+                            w))
+          ((key=? ke "s") (if (car1 'decel?)
+                              w
+                              (begin
+                                ((car1 'set-decel) #t)
+                                w)))
+          ((key=? ke "w") (if (car1 'accel?)
+                              w
+                              (begin
+                                ((car1 'set-accel) #t)
+                                ((sound-engine 'play-sound-effect) 'accelerate)
+                                w)))
+          ((key=? ke "escape") (begin
+                                 (escape-key-pressed)
+                                 w))
+          (else w))))
 
 (define (menu-release-listener w key)
   w)
@@ -34,12 +64,24 @@
   (cond ((key=? key "up") (begin
                             ((car2 'set-accel) #f)
                             w))
+        ((key=? key "left") (begin
+                             (car2 'stop-turning)
+                             w))
+        ((key=? key "right") (begin
+                                ((car1 'turn-true) 'right)
+                                w))
         ((key=? key "down") (begin
-                              ((car2 'set-decel) #f)
-                              w))
+                             (car2 'stop-turning)
+                             w))
         ((key=? key "w") (begin
                            ((car1 'set-accel) #f)
                            w))
+        ((key=? key "a") (begin
+                          (car1 'stop-turning)
+                          w))
+        ((key=? key "d") (begin
+                          (car1 'stop-turning)
+                          w))
         ((key=? key "a") (begin
                            ((car1 'set-decel) #f)))
         (else w)))

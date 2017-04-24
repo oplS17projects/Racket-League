@@ -41,9 +41,7 @@
             ((eq? message 'SwitchToGame) (SwitchToGame))
             ((eq? message 'SwitchToMenu) (SwitchToMenu))
             (else (error "Could Not Determine Menu State"))))
-    (begin
-      ((sound-engine 'play-music-effect) 'menu-music)
-      dispatch)))
+    dispatch))
 
 (define (space-key-pressed)
   (if (= 0 (menu 'get-selection))

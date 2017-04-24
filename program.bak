@@ -14,6 +14,9 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 
+;; Start of the Main Procedure
+((sound-engine 'play-music-effect) 'menu-music)
+
 (big-bang 0
           (on-key key-handler)
           (on-release release-handler)
