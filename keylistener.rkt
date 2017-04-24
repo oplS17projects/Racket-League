@@ -2,6 +2,7 @@
 
 ;; Exposed Procesdures
 (provide key-handler)
+(provide release-handler)
 
 ;; Racket Libraries
 (require 2htdp/universe)
@@ -25,9 +26,32 @@
         ((key=? ke "w") (begin ((car1 'set-accel) #t) (accelerate-car 1)) w)
         ((key=? ke "escape") (escape-key-pressed) w)
         (else w)))
+
+(define (menu-release-listener w key)
+  w)
+
+(define (game-release-listener w key)
+  (cond ((key=? key "up") (begin
+                            ((car2 'set-accel) #f)
+                            w))
+        ((key=? key "down") (begin
+                              ((car2 'set-decel) #f)
+                              w))
+        ((key=? key "w") (begin
+                           ((car1 'set-accel) #f)
+                           w))
+        ((key=? key "a") (begin
+                           ((car1 'set-decel) #f)))
+        (else w)))
   
 ;; Handles when a key event is found
 (define (key-handler w ke)
     (if (menu-state 'ShowMenu?)
         (menu-key-listener w ke)
         (game-key-listener w ke)))
+
+;; Handles when a key release happens
+(define (release-handler w key)
+  (if (menu-state 'ShowMenu?)
+      (menu-release-listener w key)
+      (game-release-listener w key)))

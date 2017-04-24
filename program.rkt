@@ -19,6 +19,7 @@
 
 (big-bang 0
           (on-key key-handler)
+          (on-release release-handler)
           (on-tick update .03)
           (to-draw draw-entities)
           (name "Racket-League"))
