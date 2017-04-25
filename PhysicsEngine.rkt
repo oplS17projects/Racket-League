@@ -1,10 +1,9 @@
 #lang racket
-#|For testing|#
-(define winSize (list 1000 750))
 
 (require "classes.rkt")
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
+(require "PhysicsEquations.rkt")
 (provide left-turn)
 (provide right-turn)
 (provide accelerate-car)
@@ -44,11 +43,6 @@ newPos = changes a position based on a velocity
           [(> calc (getAxis axis)) (getAxis axis)]
           [else calc])))
 
-#|Getter for a particular axis' length|#
-(define (getAxis axis)
-  (if (equal? axis 'x) (car winSize)
-      (cadr winSize)))
-
 #|
 currentvel = calculates the current velocity of the object
 
@@ -66,108 +60,47 @@ currentvel = calculates the current velocity of the object
           [(> v max)(list (- (* max (cos c)) 0.001)
                       (- (* max (sin c)) 0.001))])))
 
-#|Convert Keyboard input to car rotation / movement|#
-
-#|Use 'get-velo to retreve velocity of car|#
-
-#|
-ftheta = calculates the angle
-
-@param vel = velocity list
-@return    = angle
-|#
-
-(define (ftheta vel)
-  (let* ((vx (car vel))
-         (vy (cadr vel))
-         (v (findVelo (list vx vy))))
-    (if (= v 0)
-        0
-        (checkTheta (radians->degrees (cos (/ vx v)))))))
-
-#|
-checkTheta = insures Theta is less than 360
-
-@param theta = original angle
-@return      = angle < 360
-|#
-(define (checkTheta theta)
-  (if (> 360 theta) theta
-      (checkTheta (- 360 theta))))
-
-#|
-thetaXY = converts an angle into x and y components
-
-@param pts = an angle and velocity components
-@return    = new velocity components
-|#
-
-(define (thetaXY pts)
-  (let ((ang (car pts))
-        (v (cadr pts)))
-    (list (* v (cos ang))
-          (* v (sin ang)))))
-
-#|
-findVelo = finds regular velocity
-
-@param comp = components
-@return     = value
-|#
-
-(define (findVelo comp)
-  (sqrt (+ (* (car comp) (car comp))
-           (* (cadr comp) (cadr comp)))))
 
 #|
 left-turn = turn the car left
-
-@param num = which car
-@return    = new velocity
 |#
 
 (define (left-turn)
-  (let ((ntheta2 (+ (car2 'get-theta) 1))
-        (ntheta1 (+ (car1 'get-theta) 1)))
-    (begin
+  (begin
       (if (car1 'turning-left?)
-          ((car1 'update-car) (list (car1 'get-pos)
-                                    (car1 'get-velo)
-                                    ntheta1))
+          (let ((ntheta (+ (car1 'get-theta) 15)))
+            ((car1 'update-car) (list (car1 'get-pos)
+                                      (car1 'get-velo)
+                                      ntheta)))
           "Nothing to do")
       (if (car2 'turning-left?)
-          ((car2 'update-car) (list (car2 'get-pos)
-                                    (car2 'get-velo)
-                                    ntheta2))
-          "Nothing to do"))))
+          (let ((ntheta (+ (car2 'get-theta) 15)))
+            ((car2 'update-car) (list (car2 'get-pos)
+                                      (car2 'get-velo)
+                                      ntheta)))
+          "Nothing to do")))
 
 #|
 right-turn = turn the car right
-
-@param num = which car
-@return    = new velocity
 |#
 
 (define (right-turn)
-  (let ((ntheta2 (- (car2 'get-theta) 1))
-        (ntheta1 (- (car1 'get-theta) 1)))
-    (begin
+  (begin
       (if (car1 'turning-right?)
-          ((car1 'update-car) (list (car1 'get-pos)
-                                    (car1 'get-velo)
-                                    ntheta1))
+          (let ((ntheta (- (car1 'get-theta) 15)))
+            ((car1 'update-car) (list (car1 'get-pos)
+                                      (car1 'get-velo)
+                                      ntheta)))
           "Nothing to do")
       (if (car2 'turning-right?)
-          ((car2 'update-car) (list (car2 'get-pos)
-                                    (car2 'get-velo)
-                                    ntheta2))
-          "Nothing to do"))))
+          (let ((ntheta (- (car2 'get-theta) 15)))
+            ((car2 'update-car) (list (car2 'get-pos)
+                                      (car2 'get-velo)
+                                      ntheta)))
+          "Nothing to do")))
 
 #|
 slow-car = slow the car
-
-@param num = which car
-@return    = new velocity
 |#
 (define (slow-car)
   (begin
@@ -184,9 +117,6 @@ slow-car = slow the car
        
 #|
 accelerate-car = accelerate the car
-
-@param num = which car
-@return    = new velocity
 |#
 
 (define (accelerate-car)

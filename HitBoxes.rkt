@@ -3,8 +3,10 @@
 (require "classes.rkt")
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
+(require "PhysicsEquations.rkt")
 (provide carHitBox)
 (provide ptG)
+(provide demo)
 
 #|Hit Boxes and How do They Work|#
 
@@ -52,11 +54,11 @@ colission = checks to seee if two cars have collided
 @return = bool true if collided
 
 c1       c2
-A     B  E     F
+A     B  G     H
 +-----+  +-----+
 |     |  |     |
 +-----+  +-----+
-D     C  H     G
+D     C  F     E
 |#
 
 (define (colission)
@@ -71,11 +73,11 @@ D     C  H     G
          (G (caddr hb2))   #|pt G car2|#
          (H (cadddr hb2))) #|pt H car2|#
     #|check to see if one hitbox is inside the other|#
-    (cond [(and (ptG A E) (ptG E C))]
-          [(and (ptG B F) (ptG F D))]
-          [(and (ptG A G) (ptG G C))]
-          [(and (ptG A H) (ptG H D))]
-          [else #f])))
+    (cond [(and (ptG A E) (ptG E C)) #t]
+          [(and (ptG B F) (ptG F D)) #t]
+          [(and (ptG B H) (ptG H D)) #t]
+          [(and (ptG A G) (ptG G C)) #t]
+          [else (list hb1 hb2)])))
 
 #|
 ptG = Greater than for Points
@@ -86,4 +88,17 @@ ptG = Greater than for Points
 |#
 
 (define (ptG p1 p2)
-  (and (> (car p1) (car p2)) (> (cadr p1) (cadr p2))))
+  (and (< (car p1) (car p2)) (< (cadr p1) (cadr p2))))
+
+#|
+demo = determines demolition
+|#
+
+(define (demo)
+  (if (colission)
+      (let ((c1v (findVelo (car1 'get-velo)))
+            (c2v (findVelo (car2 'get-velo))))
+        (cond [(> c1v c2v) (begin (car2 'reset) #t)]
+              [(> c2v c1v) (begin (car1 'reset) #t)]
+              [else (begin (car1 'reset) (car2 'reset) #t)]))
+      #f))
