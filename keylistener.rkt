@@ -68,10 +68,10 @@
                              (car2 'stop-turning)
                              w))
         ((key=? key "right") (begin
-                                ((car1 'turn-true) 'right)
+                                (car2 'stop-turning)
                                 w))
         ((key=? key "down") (begin
-                             (car2 'stop-turning)
+                             ((car2 'set-accel) #f)
                              w))
         ((key=? key "w") (begin
                            ((car1 'set-accel) #f)
