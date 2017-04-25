@@ -4,6 +4,7 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 (require "PhysicsEquations.rkt")
+(require "HitBoxes.rkt")
 (provide left-turn)
 (provide right-turn)
 (provide accelerate-car)
@@ -15,6 +16,7 @@
 
 #|Creates new car position (pt mass)|#
 
+#|
 #|
 carpos = the new position of the car
 
@@ -42,6 +44,25 @@ newPos = changes a position based on a velocity
     (cond [(or (= 0 calc)(> 0 calc)) 0]
           [(> calc (getAxis axis)) (getAxis axis)]
           [else calc])))
+
+|#
+
+#|
+carPos = Finds the new position of the car
+
+@param c = The car to be updated
+@return  = List consisting of the new position and velocity of the car
+|#
+
+(define (carPos c)
+  (let* ((vx (car (c 'get-velo)))
+         (vy (cadr (c 'get-velo)))
+         (nvel (currentvel vx vy 50))
+         (hit (hitWall c)))
+    (if (cdr hit) (list (car hit) '(0 0))
+      (list (+ (caar hit) vx)
+            (+ (cadar hit) vy)))))
+           
 
 #|
 currentvel = calculates the current velocity of the object

@@ -7,6 +7,7 @@
 (provide carHitBox)
 (provide ptG)
 (provide demo)
+(provide hitWall)
 
 #|Hit Boxes and How do They Work|#
 
@@ -92,6 +93,13 @@ ptG = Greater than for Points
 
 #|
 demo = determines demolition
+
+c1
+A     B
++-----+
+|     |
++-----+
+D     C
 |#
 
 (define (demo)
@@ -102,3 +110,26 @@ demo = determines demolition
               [(> c2v c1v) (begin (car1 'reset) #t)]
               [else (begin (car1 'reset) (car2 'reset) #t)]))
       #f))
+
+#|
+hitWall = Determines if the car has hit an edge
+
+@param c = car
+@return  = 
+|#
+
+(define (hitWall c)
+  (let* ((hb1 (carHitBox c))
+         (A (car hb1))     #|pt A car|#
+         (B (cadr hb1))    #|pt B car|#
+         (C (caddr hb1))   #|pt C car|#
+         (D (cadddr hb1))) #|pt D car|#
+    (cond [(> 0 (car A))
+           (list (list 0 (c 'get-y)) #t)]
+          [(> (car C) (getAxis 'x))
+           (list (list (getAxis 'x) (c 'get-y)) #t)]
+          [(> 0 (car B))
+           (list (list (c 'get-x) 0) #t)]
+          [(> (car A) (getAxis 'y))
+           (list (list (c 'get-x) (getAxis 'y)) #t)]
+          [else (list (car 'get-pos) #f)])))
