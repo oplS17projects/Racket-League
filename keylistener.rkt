@@ -14,6 +14,8 @@
 
 (define (menu-key-listener w ke)
   (cond ((key=? ke " ") (space-key-pressed) w)
+        ((key=? ke "up") (up-key-pressed) w)
+        ((key=? ke "down") (down-key-pressed) w)
         (else w)))
 
 (define (game-key-listener w ke)

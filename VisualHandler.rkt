@@ -6,6 +6,7 @@
 (require 2htdp/image)
 
 (require "soundengine.rkt")
+(require "Menu.rkt")
 
 ;; Provides
 (provide car1)
@@ -14,68 +15,35 @@
 (provide entities)
 (provide boost-list)
 (provide background)
-(provide menu-background)
 (provide draw-entities)
-(provide menu-state)
 (provide world-state)
+(provide menu-background)
+(provide menu-state)
+(provide menu)
 (provide space-key-pressed)
 (provide escape-key-pressed)
-
-
-
-(define (create-menu-state)
-  (let ((shouldShow #t))
-    (define (ShowMenu?)
-      shouldShow)
-    (define (SwitchToGame)
-      (begin (set! shouldShow #f)
-             (sound-engine 'stop)
-             ((sound-engine 'play-sound-effect) 'start-game)))
-    (define (SwitchToMenu)
-      (begin (set! shouldShow #t)
-             (sound-engine 'stop)
-             ((sound-engine 'play-sound-effect) 'stop-game)
-             ((sound-engine 'play-music-effect) 'menu-music)))
-    (define (dispatch message)
-      (cond ((eq? message 'ShowMenu?) (ShowMenu?))
-            ((eq? message 'SwitchToGame) (SwitchToGame))
-            ((eq? message 'SwitchToMenu) (SwitchToMenu))
-            (else (error "Could Not Determine Menu State"))))
-    (begin
-      ((sound-engine 'play-music-effect) 'menu-music)
-      dispatch)))
-
-(define (space-key-pressed)
-  (if (= 0 (menu 'get-selection))
-      (menu-state 'SwitchToGame)
-      "Nothing to do"))
-
-(define (escape-key-pressed)
-  ((sound-engine 'play-music-effect) 'menu-music)
-  (menu-state 'SwitchToMenu))
-
-(define menu-state (create-menu-state))
-
-(define (create-menu)
-  (let ((selection 0))
-    (define (get-selection)
-      selection)
-    (define (update-selection number)
-      (begin (set! selection (+ selection number))))
-    (define (dispatch message)
-      (cond ((eq? message 'get-selection) (get-selection))
-            ((eq? message 'update-selection) update-selection)
-            (else (error "Could Not Communicate With Menu"))))
-    dispatch))
-
-(define menu (create-menu))
+(provide up-key-pressed)
+(provide down-key-pressed)
 
 (define (draw-menu scene)
-  scene)
+  (let ((selection-box (menu 'get-selection-box)))
+    (cond ((= 1 (menu 'get-selection))
+             (place-image selection-box
+                          490
+                          285
+                          scene))
+            ((= 0 (menu 'get-selection))
+             (place-image selection-box
+                          495
+                          453
+                          scene))
+            (else scene))))
 
 (define (draw-entities t)
     (if (menu-state 'ShowMenu?)
-        menu-background
+        (if (menu-state 'ShouldExit?)
+            exit-background
+            (draw-menu menu-background))
         (rhelp entities (place-image (world-state 'get-scoreboard)
                                      500
                                      30                                     
@@ -94,6 +62,82 @@
                                ((car lst) 'get-y)
                                scene)
                  scene))))
+
+(define (create-menu-state)
+  (let ((shouldShow #t)
+        (shouldExit #f))
+    (define (ShowMenu?)
+      shouldShow)
+    (define (SwitchToGame)
+      (begin (set! shouldShow #f)
+             (reset)
+             (sound-engine 'stop)
+             ((sound-engine 'play-sound-effect) 'start-game)))
+    (define (SwitchToMenu)
+      (begin (set! shouldShow #t)
+             (sound-engine 'stop)
+             ((sound-engine 'play-sound-effect) 'stop-game)
+             ((sound-engine 'play-music-effect) 'menu-music)))
+    (define (ExitGame)
+      (begin
+        (set! shouldExit #t)
+        (sound-engine 'stop)))
+    (define (dispatch message)
+      (cond ((eq? message 'ShowMenu?) (ShowMenu?))
+            ((eq? message 'SwitchToGame) (SwitchToGame))
+            ((eq? message 'SwitchToMenu) (SwitchToMenu))
+            ((eq? message 'ExitGame) (ExitGame))
+            ((eq? message 'ShouldExit?) shouldExit)
+            (else (error "Could Not Determine Menu State"))))
+      dispatch))
+
+(define (create-menu)
+  (let ((selection 1)
+        (selection-box (rectangle 385 105 "outline" "white")))
+    (define (update-selection type)
+      (begin
+        (cond ((eq? 'up type) (set! selection (+ selection 1)))
+              ((eq? 'down type) (set! selection (- selection 1)))
+              (else "Nothing to change"))
+        (cond ((> 1 selection) (set! selection 0))
+              ((< 0 selection) (set! selection 1)))))
+    (define (dispatch message)
+      (cond ((eq? message 'get-selection) selection)
+            ((eq? message 'update-selection-up) (update-selection 'up))
+            ((eq? message 'update-selection-down) (update-selection 'down))
+            ((eq? message 'get-selection-box) selection-box)
+            (else (error "Could Not Communicate With Menu"))))
+    dispatch))
+
+(define (space-key-pressed)
+  (cond ((= 1 (menu 'get-selection)) (menu-state 'SwitchToGame))
+        ((= 0 (menu 'get-selection)) (menu-state 'ExitGame))
+        (else "Nothing to do")))
+
+(define (escape-key-pressed)
+  ((sound-engine 'play-music-effect) 'menu-music)
+  (menu-state 'SwitchToMenu))
+
+(define (up-key-pressed)
+  (menu 'update-selection-up))
+
+(define (down-key-pressed)
+  (menu 'update-selection-down))
+
+(define (reset)
+  (begin
+    (car1 'reset)
+    (car2 'reset)))
+
+;; The state of the menu
+(define menu-state (create-menu-state))
+
+;; The menu
+(define menu (create-menu))
+
+;; The menu image
+(define menu-background (bitmap/file "Menu.png"))
+
 
 ;; Global Objects
 
@@ -121,8 +165,7 @@
 ;; The background image
 (define background (bitmap/file "Field.png"))
 
-;; The menu image
-(define menu-background (bitmap/file "Menu.png"))
-
 ;;State of game
 (define world-state (make-game))
+
+(define exit-background (bitmap/file "Exit.png"))
