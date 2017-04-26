@@ -91,6 +91,7 @@ update = updates positions and velocities
 
 (define (update w)
   (begin
+    (world-state 'tic)
     (accelerate-car)
     (slow-car)
     (right-turn)
