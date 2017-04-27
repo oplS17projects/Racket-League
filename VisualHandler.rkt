@@ -24,6 +24,7 @@
 (provide escape-key-pressed)
 (provide up-key-pressed)
 (provide down-key-pressed)
+(provide game-over-state)
 
 (define (draw-menu scene)
   (let ((selection-box (menu 'get-selection-box)))
@@ -44,14 +45,16 @@
         (if (menu-state 'ShouldExit?)
             exit-background
             (draw-menu menu-background))
-        (rhelp entities (place-image (world-state 'get-scoreboard)
-                                     500
-                                     30                                     
-                                     (place-image (world-state 'get-timer)
-                                                  500
-                                                  720
-                                                  background)))))
-
+        (if (game-over-state 'IsGameOver?)
+            game-over-background
+            (rhelp entities (place-image (world-state 'get-scoreboard)
+                                         500
+                                         30                                     
+                                         (place-image (world-state 'get-timer)
+                                                      500
+                                                      720
+                                                      background))))))
+  
 (define (rhelp lst scene)
   (if (null? lst)
       scene
@@ -66,11 +69,10 @@
 (define (create-menu-state)
   (let ((shouldShow #t)
         (shouldExit #f))
-    (define (ShowMenu?)
-      shouldShow)
     (define (SwitchToGame)
       (begin (set! shouldShow #f)
              (reset)
+             (world-state 'reset-game)
              (sound-engine 'stop)
              ((sound-engine 'play-sound-effect) 'start-game)))
     (define (SwitchToMenu)
@@ -83,13 +85,29 @@
         (set! shouldExit #t)
         (sound-engine 'stop)))
     (define (dispatch message)
-      (cond ((eq? message 'ShowMenu?) (ShowMenu?))
+      (cond ((eq? message 'ShowMenu?) shouldShow)
             ((eq? message 'SwitchToGame) (SwitchToGame))
             ((eq? message 'SwitchToMenu) (SwitchToMenu))
             ((eq? message 'ExitGame) (ExitGame))
             ((eq? message 'ShouldExit?) shouldExit)
             (else (error "Could Not Determine Menu State"))))
       dispatch))
+
+(define (create-game-over)
+  (let ((shouldShow #f))
+    (define (check-for-game-over)
+      (if (and (not (menu-state 'ShowMenu?))
+               (>= 0 (- (world-state 'get-game-time) (tics->seconds (world-state 'get-tics)))))
+          (set! shouldShow #t)
+          "Nothing to do"))
+    (define (dispatch message)
+      (cond ((eq? message 'IsGameOver?) shouldShow)
+            ((eq? message 'check-for-game-over) (if (not (menu-state 'ShowMenu?))
+                                                    (check-for-game-over)
+                                                    "Nothing to do"))
+            ((eq? message 'ResetGameOver) (set! shouldShow #f))
+            (else "Nothing to do")))
+    dispatch))
 
 (define (create-menu)
   (let ((selection 1)
@@ -126,8 +144,13 @@
 
 (define (reset)
   (begin
-    (car1 'reset)
-    (car2 'reset)))
+    ((car1 'reset) '(200 375) 0)
+    ((car2 'reset) '(800 375) 180)
+    ((ball 'reset) '(500 375))
+    (boost1 'rest)
+    (boost2 'reset)
+    (boost3 'reset)
+    (boost4 'reset)))
 
 ;; The state of the menu
 (define menu-state (create-menu-state))
@@ -137,7 +160,6 @@
 
 ;; The menu image
 (define menu-background (bitmap/file "Menu.png"))
-
 
 ;; Global Objects
 
@@ -168,4 +190,8 @@
 ;;State of game
 (define world-state (make-game))
 
+(define game-over-state (create-game-over))
+
 (define exit-background (bitmap/file "Exit.png"))
+
+(define game-over-background (bitmap/file "GameOver.png"))

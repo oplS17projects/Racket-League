@@ -11,6 +11,7 @@
 (provide make-game)
 (provide car-width)
 (provide car-length)
+(provide tics->seconds)
 
 (define car-width 100)
 (define car-length 50)
@@ -20,12 +21,18 @@
   (let ((tics 0)
         (score '(0 0))
         (game-time 120)) ; Game total time in seconds
+    (define (reset-game)
+      (begin
+        (set! tics 0)
+        (set! score '(0 0))
+        (set! game-time 120)))
     (define (dispatch m)
       (cond ((eq? m 'get-tics) tics)
             ((eq? m 'tic) (set! tics (add1 tics)))
             ((eq? m 'get-score) score)
             ((eq? m 'left-score) (set! score (list (add1 (car score)) (cadr score))))
             ((eq? m 'right-score) (set! score (list (car score) (add1 (cadr score)))))
+            ((eq? m 'get-game-time) game-time)
             ((eq? m 'get-timer) (text/font
                                 (seconds->timer (- game-time (tics->seconds tics)))
                                 60
@@ -44,6 +51,7 @@
                                      'normal
                                      'bold
                                      #f))
+            ((eq? m 'reset-game) (reset-game))
             (else "Invalid message passed to game object.")))
     dispatch))
 
@@ -67,19 +75,13 @@
   (quotient tic 30))
 
 (define (make-car pos theta name color)
-  (let* ((ipos pos)
-         (itheta theta)
-         (image (overlay/align "right" "middle" (rectangle (/ car-width 5) car-length "solid" "black")(rectangle car-width car-length "solid" color)))
+  (let* ((image (overlay/align "right" "middle" (rectangle (/ car-width 5) car-length "solid" "black")(rectangle car-width car-length "solid" color)))
          (velocity '(0 0))
          (boost 0)
          (accelerating #f)
          (decelerating #f)
          (turning-left #f)
          (turning-right #f))
-    (define (reset)
-      (set! pos ipos)
-      (set! theta itheta)
-      (set! velocity '(0 0)))
     (define (update-c lst)
       (set! pos (car lst))
       (set! velocity (cadr lst))
@@ -117,7 +119,6 @@
             ((eq? m 'stop-turning) (stop-turning))
             ((eq? m 'turning-left?) turning-left)
             ((eq? m 'turning-right?) turning-right)
-            ((eq? m 'reset) (reset))
             (else "Invalid message passed to car object.")))
     dispatch))
 

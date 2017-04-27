@@ -68,17 +68,25 @@ H     G      B
          (G (caddr hb))      #|pt G car|#
          (H (cadddr hb)))    #|pt H car|#
     (cond [(and (ptG D E) (ptG G D))  #|Is D inside|#
-           ((ball 'update-ball) (list (list bx (- by vy))
-                                      (list vx (- vy)) 15)) (list "D")]
+           (begin ((sound-engine 'play-sound-effect) 'small-collision)
+                  ((ball 'update-ball) (list (list bx (- by vy))
+                                             (list vx (- vy)) 15))
+                  (list "D"))]
           [(and (ptG U E) (ptG G U))  #|Is U inside|#
-           ((ball 'update-ball) (list (list bx (- by vy))
-                                      (list vx (- vy)) 15)) (list "U")]
+           (begin ((sound-engine 'play-sound-effect) 'small-collision)
+                  ((ball 'update-ball) (list (list bx (- by vy))
+                                             (list vx (- vy)) 15))
+                  (list "U"))]
           [(and (ptG R E) (ptG G R))  #|Is R inside|#
-           ((ball 'update-ball) (list (list (- bx vx) by)
-                                      (list (- vx) vy) 15)) (list "R")]
+           (begin ((sound-engine 'play-sound-effect) 'small-collision)
+                  ((ball 'update-ball) (list (list (- bx vx) by)
+                                             (list (- vx) vy) 15))
+                  (list "R"))]
           [(and (ptG L E) (ptG G L))  #|Is L inside|#
-           ((ball 'update-ball) (list (list (- bx vx) by)
-                                      (list (- vx) vy) 15)) (list "L")]
+           (begin ((sound-engine 'play-sound-effect) 'small-collision)
+                  ((ball 'update-ball) (list (list (- bx vx) by)
+                                             (list (- vx) vy) 15))
+                  (list "L"))]
           [else ((ball 'update-ball) (list (list bx by)
                                            (list vx vy) 15)) (list "none")])))
 
@@ -97,7 +105,9 @@ update = updates positions and velocities
     (right-turn)
     (left-turn)
     (if (demo) "Demo"
-        (begin ((car1 'update-car) (append (carPos car1) (list (car1 'get-theta))))
+        (begin ((sound-engine 'play-sound-effect) 'explosion)
+               ((car1 'update-car) (append (carPos car1) (list (car1 'get-theta))))
                ((car2 'update-car) (append (carPos car2) (list (car2 'get-theta))))))
     (ballPos (ball 'get-pos) (ball 'get-velo) 15)
+    (game-over-state 'check-for-game-over)
     w))

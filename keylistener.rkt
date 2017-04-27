@@ -87,12 +87,22 @@
         ((key=? key "a") (begin
                            ((car1 'set-decel) #f)))
         (else w)))
+
+(define (game-over-handler w key)
+  (if (key=? key " ")
+      (begin
+        (game-over-state 'ResetGameOver)
+        ((sound-engine 'play-music-effect) 'menu-music)
+        (menu-state 'SwitchToMenu))
+      "Nothing to do"))
+      
   
 ;; Handles when a key event is found
 (define (key-handler w ke)
-    (if (menu-state 'ShowMenu?)
-        (menu-key-listener w ke)
-        (game-key-listener w ke)))
+  (cond ((menu-state 'ShowMenu?)
+           (menu-key-listener w ke))
+          ((game-over-state 'IsGameOver?) (game-over-handler w ke))
+          (else (game-key-listener w ke))))
 
 ;; Handles when a key release happens
 (define (release-handler w key)
