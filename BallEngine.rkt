@@ -68,27 +68,28 @@ H     G      B
          (G (caddr hb))      #|pt G car|#
          (H (cadddr hb)))    #|pt H car|#
     (cond [(and (ptG D E) (ptG G D))  #|Is D inside|#
-           (begin ((sound-engine 'play-sound-effect) 'small-collision)
-                  ((ball 'update-ball) (list (list bx (- by vy))
-                                             (list vx (- vy)) 15))
-                  (list "D"))]
+           (begin
+             ((ball 'update-ball) (list (list bx (- by vy))
+                                        (list vx (- vy)) 15))
+             (list "D"))]
           [(and (ptG U E) (ptG G U))  #|Is U inside|#
-           (begin ((sound-engine 'play-sound-effect) 'small-collision)
-                  ((ball 'update-ball) (list (list bx (- by vy))
-                                             (list vx (- vy)) 15))
-                  (list "U"))]
+           (begin
+             ((ball 'update-ball) (list (list bx (- by vy))
+                                        (list vx (- vy)) 15))
+             (list "U"))]
           [(and (ptG R E) (ptG G R))  #|Is R inside|#
-           (begin ((sound-engine 'play-sound-effect) 'small-collision)
-                  ((ball 'update-ball) (list (list (- bx vx) by)
-                                             (list (- vx) vy) 15))
-                  (list "R"))]
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) by)
+                                        (list (- vx) vy) 15))
+             (list "R"))]
           [(and (ptG L E) (ptG G L))  #|Is L inside|#
-           (begin ((sound-engine 'play-sound-effect) 'small-collision)
-                  ((ball 'update-ball) (list (list (- bx vx) by)
+           (begin ((ball 'update-ball) (list (list (- bx vx) by)
                                              (list (- vx) vy) 15))
                   (list "L"))]
-          [else ((ball 'update-ball) (list (list bx by)
-                                           (list vx vy) 15)) (list "none")])))
+          [else (begin
+                  ((ball 'update-ball) (list (list bx by)
+                                             (list vx vy) 15))
+                  (list "none"))])))
 
 #|
 update = updates positions and velocities
