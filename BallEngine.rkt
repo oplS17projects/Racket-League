@@ -100,10 +100,8 @@ update = updates positions and velocities
 (define (update w)
   (begin
     (world-state 'tic)
-    (accelerate-car)
-    (slow-car)
-    (right-turn)
-    (left-turn)
+    (update-car car1)
+    (update-car car2)
     (if (demo) "Demo"
         (begin ((sound-engine 'play-sound-effect) 'explosion)
                ((car1 'update-car) (append (carPos car1) (list (car1 'get-theta))))

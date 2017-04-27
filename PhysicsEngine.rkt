@@ -7,7 +7,7 @@
 (require "HitBoxes.rkt")
 (provide left-turn)
 (provide right-turn)
-(provide accelerate-car)
+(provide update-car)
 (provide slow-car)
 (provide activate-boost)
 (provide carPos)
@@ -140,6 +140,7 @@ slow-car = slow the car
 accelerate-car = accelerate the car
 |#
 
+#|
 (define (accelerate-car)
   (begin
       (if (car1 'accel?)
@@ -153,5 +154,38 @@ accelerate-car = accelerate the car
                                    (car2 'get-theta)))
           "Nothing to do")))
 
+|#
+
 (define (activate-boost num)
   "Nothing Implemented")
+
+(define (update-car c)
+  (turn-car c)
+  (accelerate-car c)
+  (move-car c))
+
+
+(define (turn-car c)
+  (let ((current-theta (c 'get-theta)))
+    (cond ((c 'turning-left?) ((c 'update-theta) (+ current-theta 15)))
+          ((c 'turning-right?) ((c 'update-theta) (- current-theta 15)))
+          (else ((c 'update-theta) current-theta)))))
+
+(define (accelerate-car c)
+  (let* ((theta (degrees->radians (c 'get-theta)))
+        (current-vx (car (c 'get-velo)))
+        (current-vy (cadr (c 'get-velo)))
+        (new-vx (* .2  (cos theta)))
+        (new-vy (* .2 (sin theta))))
+    (cond ((and (c 'accel?) (c 'decel?)) ((c 'update-velo) (list current-vx current-vy)))
+          ((c 'accel?) ((c 'update-velo) (list (+ current-vx new-vx) (- current-vy new-vy))))
+          ((c 'decel?) ((c 'update-velo) (list (- current-vx new-vx) (+ current-vy new-vy))))
+          (else ((c 'update-velo) (list current-vx current-vy))))))
+
+(define (move-car c)
+  (let ((x (c 'get-x))
+        (y (c 'get-y))
+        (vx (car (c 'get-velo)))
+        (vy (cadr (c 'get-velo))))
+    ((c 'update-pos) (list (+ x vx) (+ y vy)))))
+          
