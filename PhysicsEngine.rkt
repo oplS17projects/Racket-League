@@ -122,7 +122,7 @@ right-turn = turn the car right
 
 #|
 slow-car = slow the car
-|#
+
 (define (slow-car)
   (begin
       (if (car1 'decel?)
@@ -135,7 +135,7 @@ slow-car = slow the car
                                      (thetaXY (list (car2 'get-theta) (- (findVelo (car2 'get-velo)) 0.2)))
                                      (car2 'get-theta)))
           "Nothing to do")))
-       
+|#       
 #|
 accelerate-car = accelerate the car
 |#
@@ -180,7 +180,26 @@ accelerate-car = accelerate the car
     (cond ((and (c 'accel?) (c 'decel?)) ((c 'update-velo) (list current-vx current-vy)))
           ((c 'accel?) ((c 'update-velo) (list (+ current-vx new-vx) (- current-vy new-vy))))
           ((c 'decel?) ((c 'update-velo) (list (- current-vx new-vx) (+ current-vy new-vy))))
-          (else ((c 'update-velo) (list current-vx current-vy))))))
+          (else (slow-car c)))))
+
+(define (slow-car c)
+  (let* ((theta (degrees->radians (c 'get-theta)))
+        (current-vx (car (c 'get-velo)))
+        (current-vy (cadr (c 'get-velo)))
+        (vx-drag (abs (* .1  (cos theta))))
+        (vy-drag (abs (* .1 (sin theta)))))
+    (cond ((> current-vx 0)
+           (cond ((> current-vy 0) ((c 'update-velo) (list (- current-vx vx-drag) (- current-vy vy-drag))))
+                 ((< current-vy 0) ((c 'update-velo) (list (- current-vx vx-drag) (+ current-vy vy-drag))))
+                 (else ((c 'update-velo) (list (- current-vx vx-drag) current-vy)))))
+          ((< current-vx 0)
+           (cond ((> current-vy 0) ((c 'update-velo) (list (+ current-vx vx-drag) (- current-vy vy-drag))))
+                 ((< current-vy 0) ((c 'update-velo) (list (+ current-vx vx-drag) (+ current-vy vy-drag))))
+                 (else ((c 'update-velo) (list (+ current-vx vx-drag) current-vy)))))
+          (else
+           (cond ((> current-vy 0) ((c 'update-velo) (list current-vx (- current-vy vy-drag))))
+                 ((< current-vy 0) ((c 'update-velo) (list current-vx (+ current-vy vy-drag))))
+                 (else ((c 'update-velo) (list current-vx current-vy))))))))
 
 (define (move-car c)
   (let ((x (c 'get-x))

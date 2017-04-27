@@ -73,7 +73,7 @@
                                 (car2 'stop-turning)
                                 w))
         ((key=? key "down") (begin
-                             ((car2 'set-accel) #f)
+                             ((car2 'set-decel) #f)
                              w))
         ((key=? key "w") (begin
                            ((car1 'set-accel) #f)
@@ -84,7 +84,7 @@
         ((key=? key "d") (begin
                           (car1 'stop-turning)
                           w))
-        ((key=? key "a") (begin
+        ((key=? key "s") (begin
                            ((car1 'set-decel) #f)))
         (else w)))
 
