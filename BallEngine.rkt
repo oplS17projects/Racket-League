@@ -46,11 +46,11 @@ ballHitCar = ball colssion with car
 
 ca
 c1       ball
-E     F     T
-+-----+     /\
+E     F     U
++-----+  UL /\ UR
 |     |  L <  > R
-+-----+     \/
-H     G      B     
++-----+  DL \/ DR
+H     G      D     
 |#
 
 (define (ballHitCar ca)
@@ -62,34 +62,63 @@ H     G      B
          (D (list bx (+ by 15)))  #|ball D pos|#
          (R (list (+ bx 15) by))  #|ball R pos|#
          (L (list (- bx 15) by))  #|ball L pos|#
+         (sqX (* (sqrt 2) bx))    #|ball x for mid positions|#
+         (sqY (* (sqrt 2) by))    #|ball y for mid positions|#
+         (UR (list (- bx sqX) (+ by sqY)))  #|ball UR pos|#
+         (UL (list (- bx sqX) (- by sqY)))  #|ball UL pos|#
+         (DL (list (+ bx sqX) (- by sqY)))  #|ball DL pos|#
+         (DR (list (+ bx sqX) (+ by sqY)))  #|ball DR pos|#
          (hb (carHitBox ca)) #|car hit box|#
          (E (car hb))        #|pt E car|#
          (F (cadr hb))       #|pt F car|#
          (G (caddr hb))      #|pt G car|#
-         (H (cadddr hb)))    #|pt H car|#
-    (cond [(and (ptG D E) (ptG G D))  #|Is D inside|#
+         (H (cadddr hb))     #|pt H car|#
+         (cvx (/ (car (ca 'get-velo)) 2))   #|car's x velo|#
+         (cvy (/ (cadr (ca 'get-velo)) 2))) #|car's y celo|#
+    (cond [(or (and (ptG U E) (ptG G U)) (and (ptG U G) (ptG E U)))      #|Is U inside|#
            (begin
              ((ball 'update-ball) (list (list bx (- by vy))
-                                        (list vx (- vy)) 15))
-             (list "D"))]
-          [(and (ptG U E) (ptG G U))  #|Is U inside|#
-           (begin
-             ((ball 'update-ball) (list (list bx (- by vy))
-                                        (list vx (- vy)) 15))
+                                        (list (+ vx cvx) (+ (- vy) cvy)) 15))
              (list "U"))]
-          [(and (ptG R E) (ptG G R))  #|Is R inside|#
+          [(or (and (ptG UR F) (ptG H UR)) (and (ptG UR H) (ptG F UR)))  #|Is UR inside|#
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) (- by vy))
+                                        (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
+             (list "UR"))]
+          [(or (and (ptG R E) (ptG G R)) (and (ptG R G) (ptG E R)))      #|Is R inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) by)
-                                        (list (- vx) vy) 15))
+                                        (list (+ (- vx) cvx) (+ vy cvy)) 15))
              (list "R"))]
-          [(and (ptG L E) (ptG G L))  #|Is L inside|#
-           (begin ((ball 'update-ball) (list (list (- bx vx) by)
-                                             (list (- vx) vy) 15))
-                  (list "L"))]
+          [(or (and (ptG DR F) (ptG H DR)) (and (ptG DR H) (ptG F DR)))  #|Is DR inside|#
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) by)
+                                        (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
+             (list "DR"))]
+          [(or (and (ptG D E) (ptG G D)) (and (ptG D G) (ptG E D)))      #|Is D inside|#
+           (begin
+             ((ball 'update-ball) (list (list bx (- by vy))
+                                        (list (+ vx cvx) (+ (- vy) cvy)) 15))
+             (list "D"))]
+          [(or (and (ptG DL F) (ptG H DL))(and (ptG DL H) (ptG F DL)))   #|Is DL inside|#
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) by)
+                                        (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
+             (list "DL"))]
+          [(or (and (ptG L G) (ptG E L)) (and (ptG L E) (ptG G L)))      #|Is L inside|#
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) by)
+                                        (list (+ (- vx) cvx) (+ vy cvy)) 15))
+             (list "L"))]
+          [(or (and (ptG UL F) (ptG H UL)) (and (ptG UL H) (ptG F UL)))  #|Is UL inside|#
+           (begin
+             ((ball 'update-ball) (list (list (- bx vx) by)
+                                        (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
+             (list "UL"))]
           [else (begin
                   ((ball 'update-ball) (list (list bx by)
                                              (list vx vy) 15))
-                  (list "none"))])))
+                  (list hb))])))
 
 #|
 update = updates positions and velocities
