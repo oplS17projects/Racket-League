@@ -5,6 +5,8 @@
 
 (require 2htdp/image)
 
+(require "soundengine.rkt")
+
 (provide make-car)
 (provide make-ball)
 (provide make-boost)
@@ -30,8 +32,14 @@
       (cond ((eq? m 'get-tics) tics)
             ((eq? m 'tic) (set! tics (add1 tics)))
             ((eq? m 'get-score) score)
-            ((eq? m 'left-score) (set! score (list (add1 (car score)) (cadr score))))
-            ((eq? m 'right-score) (set! score (list (car score) (add1 (cadr score)))))
+            ((eq? m 'left-score) (begin
+                                   ((sound-engine 'play-sound-effect) 'blue-scored)
+                                   ((sound-engine 'play-sound-effect) 'goal-scored)
+                                   (set! score (list (add1 (car score)) (cadr score)))))
+            ((eq? m 'right-score) (begin
+                                    ((sound-engine 'play-sound-effect) 'orange-scored)
+                                    ((sound-engine 'play-sound-effect) 'goal-scored)
+                                    (set! score (list (car score) (add1 (cadr score))))))
             ((eq? m 'get-game-time) game-time)
             ((eq? m 'get-timer) (text/font
                                 (seconds->timer (- game-time (tics->seconds tics)))
