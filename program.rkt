@@ -14,7 +14,7 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 
-;((sound-engine 'play-music-effect) 'menu-music)
+((sound-engine 'play-music-effect) 'menu-music)
 
 (big-bang 0
           (on-key key-handler)

@@ -102,10 +102,6 @@ update = updates positions and velocities
     (world-state 'tic)
     (update-car car1)
     (update-car car2)
-    (if (demo) "Demo"
-        (begin ((sound-engine 'play-sound-effect) 'explosion)
-               ((car1 'update-car) (append (carPos car1) (list (car1 'get-theta))))
-               ((car2 'update-car) (append (carPos car2) (list (car2 'get-theta))))))
     (ballPos (ball 'get-pos) (ball 'get-velo) 15)
     (game-over-state 'check-for-game-over)
     w))

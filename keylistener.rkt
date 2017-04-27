@@ -35,7 +35,7 @@
                                w
                                (begin
                                  ((car2 'set-accel) #t)
-                                 ;((sound-engine 'play-sound-effect) 'accelerate)
+                                 ((sound-engine 'play-sound-effect) 'accelerate)
                                  w)))
           ((key=? ke "a") (begin
                            ((car1 'turn-true) 'left)
@@ -52,7 +52,7 @@
                               w
                               (begin
                                 ((car1 'set-accel) #t)
-                                ;((sound-engine 'play-sound-effect) 'accelerate)
+                                ((sound-engine 'play-sound-effect) 'accelerate)
                                 w)))
           ((key=? ke "escape") (begin
                                  (escape-key-pressed)
@@ -92,7 +92,7 @@
   (if (key=? key " ")
       (begin
         (game-over-state 'ResetGameOver)
-        ;((sound-engine 'play-music-effect) 'menu-music)
+        ((sound-engine 'play-music-effect) 'menu-music)
         (menu-state 'SwitchToMenu))
       "Nothing to do"))
       

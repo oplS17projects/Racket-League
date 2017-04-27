@@ -5,64 +5,11 @@
 (require "soundengine.rkt")
 (require "PhysicsEquations.rkt")
 (require "HitBoxes.rkt")
-(provide left-turn)
-(provide right-turn)
 (provide update-car)
-(provide slow-car)
-(provide activate-boost)
-(provide carPos)
 (provide currentvel)
 (provide getAxis)
 
-#|Creates new car position (pt mass)|#
 
-#|
-#|
-carpos = the new position of the car
-
-@param pos = (x,y) position of the car
-@param vel = (vx,vy) velocity of the car as components
-@return    = returns a list consisting of the new position of the car
-             and the new velocity
-|#
-(define (carPos pos vel)
-  (let* ((nvel (currentvel (car vel) (cadr vel) 50))
-         (nXpos (newPos (car pos) (car nvel) 'x))
-         (nYpos (newPos (cadr pos) (cadr nvel) 'y)))
-    (list (list nXpos nYpos) nvel)))
-
-#|
-newPos = changes a position based on a velocity
-
-@param p  = position
-@param vp = velocity component
-@param maxWin = width of axis
-@return   = new position
-|#
-(define (newPos p vp axis)
-  (let ((calc (+ p vp)))
-    (cond [(or (= 0 calc)(> 0 calc)) 0]
-          [(> calc (getAxis axis)) (getAxis axis)]
-          [else calc])))
-
-|#
-
-#|
-carPos = Finds the new position of the car
-
-@param c = The car to be updated
-@return  = List consisting of the new position and velocity of the car
-|#
-
-(define (carPos c)
-  (let* ((vx (car (c 'get-velo)))
-         (vy (cadr (c 'get-velo)))
-         (nvel (currentvel vx vy 50))
-         (hit (hitWall c)))
-    (if (cdr hit) (list (car hit) '(0 0))
-      (list (+ (caar hit) vx)
-            (+ (cadar hit) vy)))))
-           
 
 #|
 currentvel = calculates the current velocity of the object
@@ -82,87 +29,30 @@ currentvel = calculates the current velocity of the object
                       (- (* max (sin c)) 0.001))])))
 
 
-#|
-left-turn = turn the car left
-|#
 
-(define (left-turn)
-  (begin
-      (if (car1 'turning-left?)
-          (let ((ntheta (+ (car1 'get-theta) 15)))
-            ((car1 'update-car) (list (car1 'get-pos)
-                                      (car1 'get-velo)
-                                      ntheta)))
-          "Nothing to do")
-      (if (car2 'turning-left?)
-          (let ((ntheta (+ (car2 'get-theta) 15)))
-            ((car2 'update-car) (list (car2 'get-pos)
-                                      (car2 'get-velo)
-                                      ntheta)))
-          "Nothing to do")))
-
-#|
-right-turn = turn the car right
-|#
-
-(define (right-turn)
-  (begin
-      (if (car1 'turning-right?)
-          (let ((ntheta (- (car1 'get-theta) 15)))
-            ((car1 'update-car) (list (car1 'get-pos)
-                                      (car1 'get-velo)
-                                      ntheta)))
-          "Nothing to do")
-      (if (car2 'turning-right?)
-          (let ((ntheta (- (car2 'get-theta) 15)))
-            ((car2 'update-car) (list (car2 'get-pos)
-                                      (car2 'get-velo)
-                                      ntheta)))
-          "Nothing to do")))
-
-#|
-slow-car = slow the car
-
-(define (slow-car)
-  (begin
-      (if (car1 'decel?)
-          ((car1 'update-car)(list (car1 'get-pos)
-                                     (thetaXY (list (car1 'get-theta) (- (findVelo (car1 'get-velo)) 0.2)))
-                                     (car1 'get-theta)))
-          "Nothing to do")
-      (if (car2 'decel?)
-          ((car2 'update-car)(list (car2 'get-pos)
-                                     (thetaXY (list (car2 'get-theta) (- (findVelo (car2 'get-velo)) 0.2)))
-                                     (car2 'get-theta)))
-          "Nothing to do")))
-|#       
-#|
-accelerate-car = accelerate the car
-|#
-
-#|
-(define (accelerate-car)
-  (begin
-      (if (car1 'accel?)
-          ((car1 'update-car)(list (car1 'get-pos)
-                                   (thetaXY (list (car1 'get-theta) (+ (findVelo (car1 'get-velo)) 0.2)))
-                                   (car1 'get-theta)))
-          "Nothing to do")
-      (if (car2 'accel?)
-          ((car2 'update-car)(list (car2 'get-pos)
-                                   (thetaXY (list (car2 'get-theta) (+ (findVelo (car2 'get-velo)) 0.2)))
-                                   (car2 'get-theta)))
-          "Nothing to do")))
-
-|#
 
 (define (activate-boost num)
   "Nothing Implemented")
+
+#|
+  update-car: main procedure for updating a car.
+  Deals with turning it, finding new velocity, and moving it
+
+  Takes a car object and returns nothing
+|#
 
 (define (update-car c)
   (turn-car c)
   (accelerate-car c)
   (move-car c))
+
+#|
+  turn-car: procedure for turning a car.
+  Checks if a car is supposed to be turining and adjusts
+  angle accordingly
+
+  Takes a car object and returns nothing
+|#
 
 
 (define (turn-car c)
@@ -170,6 +60,15 @@ accelerate-car = accelerate the car
     (cond ((c 'turning-left?) ((c 'update-theta) (+ current-theta 15)))
           ((c 'turning-right?) ((c 'update-theta) (- current-theta 15)))
           (else ((c 'update-theta) current-theta)))))
+
+#|
+  accelerate-car: procedure for adjusting cars velocity
+  Checks if a car is accelerating or decelerating and adjusts its
+  velocity accordingly. If it's neither accelerating or decelerating, it
+  calls the slow-car function to decrease the cars speed
+
+  Takes a car object and returns nothing
+|#
 
 (define (accelerate-car c)
   (let* ((theta (degrees->radians (c 'get-theta)))
@@ -181,6 +80,14 @@ accelerate-car = accelerate the car
           ((c 'accel?) ((c 'update-velo) (list (+ current-vx new-vx) (- current-vy new-vy))))
           ((c 'decel?) ((c 'update-velo) (list (- current-vx new-vx) (+ current-vy new-vy))))
           (else (slow-car c)))))
+
+#|
+  slow-car: procedure that simulates friction aka drag
+  Checks the velocity of the car and reduces its magnitude.
+  This is very messy and can probably be optimized.
+
+  takes a car object and returns nothing
+|#
 
 (define (slow-car c)
   (let* ((theta (degrees->radians (c 'get-theta)))
@@ -200,6 +107,14 @@ accelerate-car = accelerate the car
            (cond ((> current-vy 0) ((c 'update-velo) (list current-vx (- current-vy vy-drag))))
                  ((< current-vy 0) ((c 'update-velo) (list current-vx (+ current-vy vy-drag))))
                  (else ((c 'update-velo) (list current-vx current-vy))))))))
+
+#|
+  move-car: procedure for updating car's position
+  Uses current velocity and position to find new position.
+
+  Takes a car object and returns nothing.
+|#
+
 
 (define (move-car c)
   (let ((x (c 'get-x))
