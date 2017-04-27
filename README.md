@@ -9,28 +9,23 @@ We are interested in creating this project mostly because none of us have ever r
 
 ### Analysis
 
-    * Data Abstraction -> Many of the objects will be using will depend upon an X Y coordinate and will need various accessors to get those coordinates.
+    * Data Abstraction -> Many of the objects depend upon an X Y coordinate and thus need various accessors to get those coordinates. The car objects, ball object, and boost objects are all abstracted in some way to make manipulating them easier.
     * Object-Orientation -> We will need a Player and Ball objects to save state data for accessing within our engine loop.
-    * State-Modification -> Will apply to our objects that we create since we will need to constantly redraw images and change the state of the objects based on what is happening in the game. State-Modification will help us manage our memory.
-    * Map/Filter/Reduce -> We are still trying to design the finer details of our code, but we do expect to use these to help us manage our objects.
+    * State-Modification -> Modified the state of objects so as not to create new ones constantly throughout the runtime of the program. Also used state modification to hold the game state to make it easier to transition between menu state and game state.
+    * Map/Filter/Reduce -> Wrote custom filter procedure within the sound engine along with mapping the list of entites within the draw procedure.
 
 ### External Technologies
-You are encouraged to develop a project that connects to external systems. For example, this includes systems that:
 
-- Sound -> Any good game needs sound effects, so we are planning on creating our own.
+- Sound -> Any good game needs sound effects, so we created our own.
 - Control -> Player movement will depend upon keyboard input and the whole system will depend upon a physics based engine
 
 ### Deliverable and Demonstration
 
-  The plan for this project is to have an air-hockey like game where that allows two players to play at the same time against eachother on the same computer.  The cars should always go forward in the direction they are facing and the ball should bounce off surfaces at the correct angles.
-  There will also be different field designs and a GUI allowing for the alteration of the ball's size, elastiticy, etc.  
-  If all goes exteramly well, we will implement basic AIs.  One would simply chase the ball, while the other would play goal.  
+  This project is more similar to air hockey than it is to rocket league. Players are able to control two cars using either the arrow keys or the wasd keys. They can drive around and interact with the ball to try to hit it into the opposing goal. The players can collide with eachother, the wall, and the ball. There is also a timer as each match only lasts two minutes. There is a scoreboard so players can see their score as well. Currently, boost is not implemented.
  
 ### Evaluation of Results
-How will you know if you are successful? 
-If you include some kind of _quantitative analysis,_ that would be good.
 
-To be successful, we should be able to play a full match, from start to finish, without any hiccups. All of our physics procedures should be unit tested along with our basic game logic.
+To be successful, we should be able to play a full match, from start to finish, without any major hiccups.
 
 ## Architecture Diagram
 ![Architecture Diagram](/ArchitectureDiagram.png?raw=false "Architecture Diagram")
@@ -50,14 +45,28 @@ We have a simple menu. Player and ball classes are implemented. Both the player 
 
 ### Second Milestone (Sun Apr 16)
 We have a full menu that can be updated. Two players can get drawn to the screen and drive around. They can hit the ball and each other. If the ball goes into the goal, it disappears and a goal is scored internally on a scoreboard. 
-### Public Presentation (Mon Apr 24, Wed Apr 26, or Fri Apr 28 [your date to be determined later])
+
+### Public Presentation (Fri Apr 28)
 Within the game itself, there is a visual scoreboard and timer to keep track of everything. The Menu allows a user to select from two different maps with varying friction levels (which should affect player and ball movement). A full 2-minute timed match can be played out.
+
+### Did we meet our Milestones?
+For the most part, we were pretty behind on our milestones. This was mostly due to the overcomplication of the physics engine. We really couldn't test our game without it working and it took much longer than inteded to get it working. The rest of the game logic was present though, so although we were behind on our milestones, I think we were successfully able to catch up and produce a working game.
 
 ## Group Responsibilities
 
 ### Alexander Infantino @infantinoalex
 Team Lead
-Alex will be working on the menu, sound effects, and unit testing.
+Implemented:
+  * Key listener
+      * Is able to handle on-key events and on-release events which drive the car and menu navigation
+  * Sound Engine
+      * Able to play sounds using a pre-loaded list of r-shounds that were recorded by myself
+  * Menu
+      * Got a basic menu working with a Start and Exit option that either start the game of show an exit background
+  * Game Over Screen
+      * Using Dave's World-State, I was able to show a game over screen when the timer reaches 0
+  * File Hierarchy
+      * Updated the file structure to move code into grouped folders for better readability.
 
 ### Thaddeus Ciras @TCiras
 Thad will be working on...
