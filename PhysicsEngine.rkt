@@ -23,9 +23,10 @@ currentvel = calculates the current velocity of the object
   (let* ((v (findVelo (list vx vy)))
          (c (if (= v 0) 0 (acos (/ vx v)))))
     (cond [(= 0 v) (list 0 0)]
-          [(> max v) (list (- vx 0.001) (- vy 0.001))]
+          [(> max v) (list (- vx 0.001)
+                           (- vy 0.001))]
           [(> v max)(list (- (* max (cos c)) 0.001)
-                      (- (* max (sin c)) 0.001))])))
+                          (- (* max (sin c)) 0.001))])))
 
 
 

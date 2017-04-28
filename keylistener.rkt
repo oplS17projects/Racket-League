@@ -35,7 +35,6 @@
                                w
                                (begin
                                  ((car2 'set-accel) #t)
-                                 ((sound-engine 'play-sound-effect) 'accelerate)
                                  w)))
           ((key=? ke "a") (begin
                            ((car1 'turn-true) 'left)
@@ -52,7 +51,6 @@
                               w
                               (begin
                                 ((car1 'set-accel) #t)
-                                ((sound-engine 'play-sound-effect) 'accelerate)
                                 w)))
           ((key=? ke "escape") (begin
                                  (escape-key-pressed)
