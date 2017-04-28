@@ -76,7 +76,15 @@ Implemented:
  * Goals - Goals are scored and recorded to the correct team
 
 ### Dave Caizzi @caizzi 
-Dave will be working on
-* Creation of classes
-* Drawing images to the screen
-* Creating sprites for objects
+Implemented:
+   * Graphics
+      * Created a visual handler which draws all game entities to the screen.
+      * Created (very basic) images for the cars.
+   * Classes
+      * Created Car and Ball objects which allow user to interface with and get info from.
+   * Physics
+      * Made the cars able to drive around the screen. Thad dealt with collision detection, though.
+   * World State
+      * Implemented a world state class that contained important info about the game.
+      * Contained a scoreboard that tallied up each players score. Scoreboard is also drawn to screen.
+      * Also features a timer which counts down from 2:00 for the game time. Timer is drawn to screen.
