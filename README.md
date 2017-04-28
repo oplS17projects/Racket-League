@@ -69,13 +69,11 @@ Implemented:
       * Updated the file structure to move code into grouped folders for better readability.
 
 ### Thaddeus Ciras @TCiras
-Thad will be working on...
+Implemented:
  * Physics
-   * Ball
-   * Players
- * Boost Calculations
- * Demolition
- * AI - Goalie
+   * Ball - Ball bounces off the walls and has interesting interactions with the cars
+   * Cars - Cars move around (although Dave fixed the issues I created) and they cannot leave the playing window
+ * Goals - Goals are scored and recorded to the correct team
 
 ### Dave Caizzi @caizzi 
 Dave will be working on
