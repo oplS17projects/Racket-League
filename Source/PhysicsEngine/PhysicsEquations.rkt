@@ -1,5 +1,10 @@
 #lang racket
 
+;; Racket Libraries
+
+;; Custom Libraries
+
+;; Provides
 (provide getAxis)
 (provide ftheta)
 (provide findVelo)
