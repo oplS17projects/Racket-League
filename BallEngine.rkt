@@ -41,11 +41,11 @@ ballNewPosX = calculates new ball x position
 (define (ballNewPosX x y vel rad)
   (cond [(and (>= 0 (- x rad))           #|ball is off to the left|#
               (and (< y 475) (> y 275))) #|ball is in the goal area|#
-         (begin (world-state 'left-score) "goal")]
+         (begin (world-state 'right-score) "goal")]
         [(>= 0 (- x rad)) (list (- x vel) (- vel))]
         [(and (<= (getAxis 'x) (+ x rad))#|ball is off to the right|#
               (and (< y 475) (> y 275))) #|ball is in the goal area|#
-         (begin (world-state 'right-score) "goal")]
+         (begin (world-state 'left-score) "goal")]
         [(<= (getAxis 'x) (+ x rad)) (list (- x vel) (- vel))]
         [else (list (+ x vel) vel)]))
 
@@ -104,7 +104,7 @@ H     G      D
              ((ball 'update-ball) (list (list bx (- by vy))
                                         (list (+ vx cvx) (+ (- vy) cvy)) 15))
              (list "U"))]
-          [(or (and (ptG UR F) (ptG H UR)) (and (ptG UR H) (ptG F UR)))  #|Is UR inside|#
+          [(or (and (ptG UR E) (ptG G UR)) (and (ptG UR G) (ptG E UR)))  #|Is UR inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) (- by vy))
                                         (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
@@ -114,7 +114,7 @@ H     G      D
              ((ball 'update-ball) (list (list (- bx vx) by)
                                         (list (+ (- vx) cvx) (+ vy cvy)) 15))
              (list "R"))]
-          [(or (and (ptG DR F) (ptG H DR)) (and (ptG DR H) (ptG F DR)))  #|Is DR inside|#
+          [(or (and (ptG DR E) (ptG G DR)) (and (ptG DR G) (ptG E DR)))  #|Is DR inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) by)
                                         (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
@@ -124,17 +124,17 @@ H     G      D
              ((ball 'update-ball) (list (list bx (- by vy))
                                         (list (+ vx cvx) (+ (- vy) cvy)) 15))
              (list "D"))]
-          [(or (and (ptG DL F) (ptG H DL))(and (ptG DL H) (ptG F DL)))   #|Is DL inside|#
+          [(or (and (ptG DL E) (ptG G DL))(and (ptG DL G) (ptG E DL)))   #|Is DL inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) by)
                                         (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))
              (list "DL"))]
-          [(or (and (ptG L G) (ptG E L)) (and (ptG L E) (ptG G L)))      #|Is L inside|#
+          [(or (and (ptG L E) (ptG G L)) (and (ptG L G) (ptG E L)))      #|Is L inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) by)
                                         (list (+ (- vx) cvx) (+ vy cvy)) 15))
              (list "L"))]
-          [(or (and (ptG UL F) (ptG H UL)) (and (ptG UL H) (ptG F UL)))  #|Is UL inside|#
+          [(or (and (ptG UL E) (ptG G UL)) (and (ptG UL G) (ptG E UL)))  #|Is UL inside|#
            (begin
              ((ball 'update-ball) (list (list (- bx vx) by)
                                         (list (+ (- vx) cvx) (+ (- vy) cvy)) 15))

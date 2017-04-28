@@ -106,10 +106,10 @@ D     C
   (if (colission)
       (let ((c1v (findVelo (car1 'get-velo)))
             (c2v (findVelo (car2 'get-velo))))
-        (cond [(> c1v c2v) (begin (car2 'reset) #t)]
-              [(> c2v c1v) (begin (car1 'reset) #t)]
-              [else (begin (car1 'reset) (car2 'reset) #t)]))
-      #f))
+        (cond [(> c1v c2v) (car2 'reset)]
+              [(> c2v c1v) (car1 'reset)]
+              [else (begin (car1 'reset) (car2 'reset))]))
+      "no colision"))
 
 #|
 hitWall = Determines if the car has hit an edge
@@ -119,17 +119,35 @@ hitWall = Determines if the car has hit an edge
 |#
 
 (define (hitWall c)
-  (let* ((hb1 (carHitBox c))
-         (A (car hb1))     #|pt A car|#
-         (B (cadr hb1))    #|pt B car|#
-         (C (caddr hb1))   #|pt C car|#
-         (D (cadddr hb1))) #|pt D car|#
-    (cond [(> 0 (car A))
-           (list (list 0 (c 'get-y)) #t)]
-          [(> (car C) (getAxis 'x))
-           (list (list (getAxis 'x) (c 'get-y)) #t)]
-          [(> 0 (car B))
-           (list (list (c 'get-x) 0) #t)]
-          [(> (car A) (getAxis 'y))
-           (list (list (c 'get-x) (getAxis 'y)) #t)]
-          [else (list (car 'get-pos) #f)])))
+  (let* ((hb (carHitBox c))
+           (A (car hb))
+           (B (cadr hb))
+           (C (caddr hb))
+           (D (cadddr hb))
+           (vel (c 'get-velo)))
+      (cond [(or (< (car A) 0) (< (car B) 0) (< (car C) 0) (< (car D) 0)) #|If the car's x is less that 0|#
+             (cond [(or (< (cadr A) 0) (< (cadr B) 0) (< (cadr C) 0) (< (cadr D) 0))  #|and y is less than 0|#
+                    (begin ((c 'update-pos) (list 50 50))
+                           ((c 'update-velo) (list 0 0)))]
+                   [(or (> (cadr A) (getAxis 'y)) (> (cadr B) (getAxis 'y)) (> (cadr C) (getAxis 'y)) (> (cadr D) (getAxis 'y)))
+                    (begin ((c 'update-pos) (list 50 (- (getAxis 'y) 50)))            #|and y is greater than max|#
+                           ((c 'update-velo) (list 0 0)))]
+                   [else (begin ((c 'update-pos) (list 50 (c 'get-y)))
+                                ((c 'update-velo) (list 0 (cadr vel))))])]   #|\/ If the car's x is greater than max|#
+            [(or (> (car A) (getAxis 'x)) (> (car B) (getAxis 'x)) (> (car C) (getAxis 'x)) (> (car D) (getAxis 'x)))
+             (cond [(or (< (cadr A) 0) (< (cadr B) 0) (< (cadr C) 0) (< (cadr D) 0)) #|and y is less than 0|#
+                    (begin ((c 'update-pos) (list (- (getAxis 'x) 50) 50))
+                           ((c 'update-velo) (list 0 0)))]                           #|\/ and y is greater than max|#
+                   [(or (> (cadr A) (getAxis 'y)) (> (cadr B) (getAxis 'y)) (> (cadr C) (getAxis 'y)) (> (cadr D) (getAxis 'y)))
+                    (begin ((c 'update-pos) (list (- (getAxis 'x) 50) (- (getAxis 'y) 50)))
+                           ((c 'update-velo) (list 0 0)))]
+                   [else (begin ((c 'update-pos) (list (- (getAxis 'x) 50) (c 'get-y)))
+                                ((c 'update-velo) (list 0 (cadr vel))))])]
+            [else
+             (cond [(or (< (cadr A) 0) (< (cadr B) 0) (< (cadr C) 0) (< (cadr D) 0))  #|if y is less than 0|#
+                    (begin ((c 'update-pos) (list (c 'get-x) 50))
+                           ((c 'update-velo) (list (car vel) 0)))]                    #|\/ if y is greater than max|#
+                   [(or (> (cadr A) (getAxis 'y)) (> (cadr B) (getAxis 'y)) (> (cadr C) (getAxis 'y)) (> (cadr D) (getAxis 'y)))
+                    (begin ((c 'update-pos) (list (c 'get-x) (- (getAxis 'y) 50)))
+                           ((c 'update-velo) (list (car vel) 0)))]
+                   [else ((c 'update-pos) (list (c 'get-x) (c 'get-y)))])])))
