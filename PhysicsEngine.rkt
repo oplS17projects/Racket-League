@@ -145,14 +145,14 @@ checkPos = insures the car is at a valid position
                          ((c 'update-velo) (list 0 0)))]
                  [else (begin ((c 'update-pos) (list 50 (c 'get-y)))
                               ((c 'update-velo) (list 0 (cadr vel))))])]   #|\/ If the car's x is greater than max|#
-           [(or (> (cadr A) (getAxis 'x)) (> (cadr B) (getAxis 'x)) (> (cadr C) (getAxis 'x)) (> (cadr D) (getAxis 'x)))
+           [(or (> (car A) (getAxis 'x)) (> (car B) (getAxis 'x)) (> (car C) (getAxis 'x)) (> (car D) (getAxis 'x)))
             (cond [(or (< (cadr A) 0) (< (cadr B) 0) (< (cadr C) 0) (< (cadr D) 0)) #|and y is less than 0|#
                    (begin ((c 'update-pos) (list (- (getAxis 'x) 50) 50))
                           ((c 'update-velo) (list 0 0)))]                           #|\/ and y is greater than max|#
                   [(or (> (cadr A) (getAxis 'y)) (> (cadr B) (getAxis 'y)) (> (cadr C) (getAxis 'y)) (> (cadr D) (getAxis 'y)))
                    (begin ((c 'update-pos) (list (- (getAxis 'x) 50) (- (getAxis 'y) 50)))
                          ((c 'update-velo) (list 0 0)))]
-                  [else (begin ((c 'update-pos) (list (getAxis 'x) (c 'get-y)))
+                  [else (begin ((c 'update-pos) (list (- (getAxis 'x) 50) (c 'get-y)))
                               ((c 'update-velo) (list 0 (cadr vel))))])]
            [else
             (cond [(or (< (cadr A) 0) (< (cadr B) 0) (< (cadr C) 0) (< (cadr D) 0))  #|if y is less than 0|#
