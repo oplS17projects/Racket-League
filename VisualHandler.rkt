@@ -25,6 +25,7 @@
 (provide up-key-pressed)
 (provide down-key-pressed)
 (provide game-over-state)
+(provide reset)
 
 (define (draw-menu scene)
   (let ((selection-box (menu 'get-selection-box)))
@@ -147,7 +148,7 @@
     ((car1 'reset) '(200 375) 0)
     ((car2 'reset) '(800 375) 180)
     ((ball 'reset) '(500 375))
-    (boost1 'rest)
+    (boost1 'reset)
     (boost2 'reset)
     (boost3 'reset)
     (boost4 'reset)))

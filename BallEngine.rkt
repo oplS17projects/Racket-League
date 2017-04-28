@@ -4,6 +4,7 @@
 (require "VisualHandler.rkt")
 (require "soundengine.rkt")
 (require "PhysicsEngine.rkt")
+(require "PhysicsEquations.rkt")
 (require "HitBoxes.rkt")
 (provide ballPos)
 (provide update)
@@ -18,25 +19,48 @@ ballPos = Set the ball's new position
 @param rad = the radius of the ball
 |#
 (define (ballPos pos vel rad)
-  (let* ((nvel (currentvel (car vel) (cadr vel) 75))          #|Sets balls velocity|#
-         (nXpos (ballNewPos (car pos) (car nvel) rad 'x))     #|Finds x pos and vel|#
-         (nYpos (ballNewPos (cadr pos) (cadr nvel) rad 'y)))  #|Finds y pos and vel|#
-    ((ball 'update-ball) (list (list (car nXpos) (car nYpos)) #|Updates ball|#
-                                   (list (cadr nXpos) (cadr nYpos)))))
-  (ballHitCar car1)     #|Checks for colission with car 1|#
-  (ballHitCar car2))    #|Checks for colission with car 2|#
+  (begin
+    (let* ((nvel (currentvel (car vel) (cadr vel) 75))          #|Sets balls velocity|#
+           (nXpos (ballNewPosX (car pos) (cadr pos) (car nvel) rad))     #|Finds x pos and vel|#
+           (nYpos (ballNewPosY (cadr pos) (cadr nvel) rad)))  #|Finds y pos and vel|#
+      (if (pair? nXpos)
+          ((ball 'update-ball) (list (list (car nXpos) (car nYpos)) #|Updates ball|#
+                                     (list (cadr nXpos) (cadr nYpos))))
+          (reset)))
+    (ballHitCar car1)      #|Checks for colission with car 1|#
+    (ballHitCar car2)))    #|Checks for colission with car 2|#
 
 #|
-ballNewPos = calculates new ball x position
+ballNewPosX = calculates new ball x position
 
 @param pos = position
 @param vel = velocity
 @param rad = ball radius
 @return    = new position and velocity
 |#
-(define (ballNewPos pos vel rad axis)
+(define (ballNewPosX x y vel rad)
+  (cond [(and (>= 0 (- x rad))           #|ball is off to the left|#
+              (and (< y 475) (> y 275))) #|ball is in the goal area|#
+         (begin (world-state 'left-score) "goal")]
+        [(>= 0 (- x rad)) (list (- x vel) (- vel))]
+        [(and (<= (getAxis 'x) (+ x rad))#|ball is off to the right|#
+              (and (< y 475) (> y 275))) #|ball is in the goal area|#
+         (begin (world-state 'right-score) "goal")]
+        [(<= (getAxis 'x) (+ x rad)) (list (- x vel) (- vel))]
+        [else (list (+ x vel) vel)]))
+
+
+#|
+ballNewPosY = calculates new ball y position
+
+@param pos = position
+@param vel = velocity
+@param rad = ball radius
+@return    = new position and velocity
+|#
+(define (ballNewPosY pos vel rad)
   (cond [(>= 0 (- pos rad)) (list (- pos vel) (- vel))]
-        [(<= (getAxis axis) (+ pos rad)) (list (- pos vel) (- vel))]
+        [(<= (getAxis 'y) (+ pos rad)) (list (- pos vel) (- vel))]
         [else (list (+ pos vel) vel)]))
 
 #|

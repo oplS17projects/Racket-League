@@ -7,7 +7,6 @@
 (require "HitBoxes.rkt")
 (provide update-car)
 (provide currentvel)
-(provide getAxis)
 
 
 
