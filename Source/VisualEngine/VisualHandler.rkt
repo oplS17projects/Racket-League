@@ -160,7 +160,7 @@
 (define menu (create-menu))
 
 ;; The menu image
-(define menu-background (bitmap/file "Resources/Images/Menu.png"))
+(define menu-background (bitmap/file (build-path (current-directory) "Resources" "Images" "Menu.png")))
 
 ;; Global Objects
 
@@ -186,13 +186,13 @@
 (define boost-list (list boost1 boost2 boost3 boost4))
 
 ;; The background image
-(define background (bitmap/file "Resources/Images/Field.png"))
+(define background (bitmap/file (build-path (current-directory) "Resources" "Images" "Field.png")))
 
 ;;State of game
 (define world-state (make-game))
 
 (define game-over-state (create-game-over))
 
-(define exit-background (bitmap/file "Resources/Images/Exit.png"))
+(define exit-background (bitmap/file (build-path (current-directory) "Resources" "Images" "Exit.png")))
 
-(define game-over-background (bitmap/file "Resources/Images/GameOver.png"))
+(define game-over-background (bitmap/file (build-path (current-directory) "Resources" "Images" "GameOver.png")))
