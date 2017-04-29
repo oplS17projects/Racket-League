@@ -28,7 +28,7 @@ We are interested in creating this project mostly because none of us have ever r
 To be successful, we should be able to play a full match, from start to finish, without any major hiccups.
 
 ## Architecture Diagram
-![Architecture Diagram](/ArchitectureDiagram.png?raw=false "Architecture Diagram")
+![Architecture Diagram](/Plan/ArchitectureDiagram.png?raw=false "Architecture Diagram")
 
 The engine is the main driver of our game. It will keep track of the objects we have, update them when necessary, check for input from our keyboard listener, tell our sound engine when to play music, and tell our visual handler when things need to be drawn and redrawn. It also will be the area of code where the state of our objects is kept and modified. This is so that only the engine will be touching it and nothing else, hopefully reducing the amount of bugs we have.
 

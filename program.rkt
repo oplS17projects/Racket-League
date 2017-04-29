@@ -8,11 +8,11 @@
 (require rsound)
 
 ;; Custom Libraries
-(require "PhysicsEngine.rkt")
-(require "BallEngine.rkt")
-(require "keylistener.rkt")
-(require "VisualHandler.rkt")
-(require "soundengine.rkt")
+(require "Source/PhysicsEngine/PhysicsEngine.rkt")
+(require "Source/PhysicsEngine/BallEngine.rkt")
+(require "Source/KeyListener/keylistener.rkt")
+(require "Source/VisualEngine/VisualHandler.rkt")
+(require "Source/SoundEngine/soundengine.rkt")
 
 ((sound-engine 'play-music-effect) 'menu-music)
 

@@ -1,12 +1,14 @@
 #lang racket
 
-(provide make-car)
-(provide make-ball)
-
+;; Racket Libraries
 (require 2htdp/image)
 
-(require "soundengine.rkt")
+;; Custom Libraries
+(require "../SoundEngine/soundengine.rkt")
 
+;; Provides
+(provide make-car)
+(provide make-ball)
 (provide make-car)
 (provide make-ball)
 (provide make-boost)

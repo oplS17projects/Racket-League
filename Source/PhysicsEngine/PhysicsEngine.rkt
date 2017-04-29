@@ -1,14 +1,17 @@
 #lang racket
 
-(require "classes.rkt")
-(require "VisualHandler.rkt")
-(require "soundengine.rkt")
+;; Racket Libraries
+
+;; Custom Libraries
+(require "../Classes/classes.rkt")
+(require "../VisualEngine/VisualHandler.rkt")
+(require "../SoundEngine/soundengine.rkt")
 (require "PhysicsEquations.rkt")
 (require "HitBoxes.rkt")
+
+;; Provides
 (provide update-car)
 (provide currentvel)
-
-
 
 #|
 currentvel = calculates the current velocity of the object

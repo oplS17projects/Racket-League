@@ -1,16 +1,16 @@
 #lang racket
 
-;; Exposed Procesdures
-(provide key-handler)
-(provide release-handler)
-
 ;; Racket Libraries
 (require 2htdp/universe)
 
 ;; Custom Libraries
-(require "PhysicsEngine.rkt")
-(require "VisualHandler.rkt")
-(require "soundengine.rkt")
+(require "../PhysicsEngine/PhysicsEngine.rkt")
+(require "../VisualEngine/VisualHandler.rkt")
+(require "../SoundEngine/soundengine.rkt")
+
+;; Provides
+(provide key-handler)
+(provide release-handler)
 
 (define (menu-key-listener w ke)
   (cond ((key=? ke " ") (space-key-pressed) w)

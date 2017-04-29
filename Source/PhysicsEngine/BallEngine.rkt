@@ -1,11 +1,16 @@
 #lang racket
 
-(require "classes.rkt")
-(require "VisualHandler.rkt")
-(require "soundengine.rkt")
+;; Racket Libraries
+
+;; Custom Libraries
+(require "../Classes/classes.rkt")
+(require "../VisualEngine/VisualHandler.rkt")
+(require "../SoundEngine/soundengine.rkt")
 (require "PhysicsEngine.rkt")
 (require "PhysicsEquations.rkt")
 (require "HitBoxes.rkt")
+
+;; Provides
 (provide ballPos)
 (provide update)
 
