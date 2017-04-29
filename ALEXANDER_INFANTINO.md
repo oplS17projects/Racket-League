@@ -105,6 +105,21 @@ Here you can see that there is an object called menu-state and game-over-state. 
   (if (menu-state 'ShowMenu?)
       (menu-release-listener w key)
       (game-release-listener w key)))
+      
+;; Excerpt of how to detect what key is pressed
+...
+    (cond ((key=? ke "left") (begin
+                               ((car2 'turn-true) 'left)
+                               w))
+          ((key=? ke "right") (begin
+                                ((car2 'turn-true) 'right)
+                                w))
+          ((key=? ke "down") (if (car2 'decel?)
+                                 w
+                                 (begin
+                                   ((car2 'set-decel) #t)
+                                   w)))
+...
 ```
 
 When evaluated the code simply checks which key has been pressed and calls other functions, such as those in the PhysicsEngine, to execute. I find this code to be an elegant integration of the objects created elsewhere in the code.
