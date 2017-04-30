@@ -91,7 +91,7 @@ H     G      D
          (G (caddr hb))      #|pt G car|#
          (H (cadddr hb))     #|pt H car|#
          (cvx (/ (car (ca 'get-velo)) 2))   #|car's x velo|#
-         (cvy (/ (cadr (ca 'get-velo)) 2))) #|car's y celo|#
+         (cvy (/ (cadr (ca 'get-velo)) 2))) #|car's y velo|#
     (cond [(or (and (ptG U E) (ptG G U)) (and (ptG U G) (ptG E U)))      #|Is U inside|#
            (begin
              ((ball 'update-ball) (list (list bx (- by vy))
