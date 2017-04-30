@@ -48,14 +48,24 @@
             (draw-menu menu-background))
         (if (game-over-state 'IsGameOver?)
             game-over-background
-            (rhelp entities (place-image (world-state 'get-scoreboard)
+            (foldl
+             (lambda (entity scene)
+               (if (entity 'active?)
+                   (place-image (entity 'get-image)
+                                (entity 'get-x)
+                                (entity 'get-y)
+                                scene)
+                   scene))
+             (place-image (world-state 'get-scoreboard)
                                          500
                                          30                                     
                                          (place-image (world-state 'get-timer)
                                                       500
                                                       720
-                                                      background))))))
-  
+                                                      background))
+             
+               entities))))
+
 (define (rhelp lst scene)
   (if (null? lst)
       scene
