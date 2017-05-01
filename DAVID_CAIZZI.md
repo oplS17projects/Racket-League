@@ -8,8 +8,8 @@ The goal of this project was to create a 2D version of the game Rocket League us
 Our version, Racket-League, is simplified but still features homemade graphics and sounds, complex physics, and lots of fun.
 
 I had a variety of things I worked on in the code, but the main things I contributed were:
-* The creation of the classes that the game uses
 * Drawing all the action to the screen
+* The creation of the classes that the game uses
 * Enabling the cars to drive
 
 **Authorship note:** The majority of the code described here was written by myself. All other contributions are noted.
